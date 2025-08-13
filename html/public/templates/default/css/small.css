@@ -1,0 +1,52 @@
+@charset "UTF-8";
+/**
+ * Title: Custom CSS File
+ * Author URI: http://wayox.com
+ * Website: http://wayox.com
+ */
+
+/* Small devices (landscape phones, 576px and up to 767) */
+@media (min-width: 576px) and (max-width: 767px) {
+	.btn-cta {
+		font-size: 18px;
+		padding: 10px 20px 4px;
+	}
+
+	.btn-x-small-red {
+		font-size: 30px;
+		margin-bottom: 0 !important;
+	}
+	.txt-x-small {
+		font-size: 15px;
+	}
+
+	.logo-resize {
+		width: 55%;
+	}
+
+	.responsive-text-align-3-cols,
+	.responsive-text-align-4-cols {
+		text-align: center;
+	}
+
+	.section-title {
+		font-size: 3em;
+	}
+
+	.subscribe-height {
+		height: 155px;
+	}
+
+	.rounded {
+		border-radius: 0;
+	}
+
+	.subscribe-select-width {
+		width: 100%;
+	}
+
+	.footer-section {
+		text-align: center;
+	}
+}
+

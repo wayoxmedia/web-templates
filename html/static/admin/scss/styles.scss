@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+
+@import "variables/variables";
+
+// Import Bootstrap source files (Required file)
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+// Tabler Icons style
+@import "../css/icons/tabler-icons/tabler-icons.css";
+
+// Theme Layouts style (Required file)
+@import "layouts/sidebar";
+@import "layouts/header";
+@import "layouts/layouts";
+
+// Component style (Required file)
+
+@import "component/reboot";
+@import "component/card";
+
+// Utilities style (Required file)
+@import "utilities/icon-size";
+
+
+// Pages style (Required file)
+@import "pages/dashboard1";

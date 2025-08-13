@@ -1,0 +1,46 @@
+########################
+### App & Security
+.env
+secure/*
+!.gitkeep
+!secure/config.sample.php
+!secure/config.js.php
+
+########################
+### IDE
+.idea/
+/.idea
+/*.iml
+/nbproject/
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+template1.code-workspace
+
+########################
+### COMPOSER
+/vendor/
+!/composer.json
+composer.lock
+
+########################
+### App logs
+html/logs
+
+########################
+### Documentation
+docs
+
+########################
+### OS
+.DS_Store
+
+########################
+### In HTML static files
+html/node_modules/
+html/vendor/
+html/composer.lock
+html/tests/mocks/database/ci_test.sqlite
+html/static/admin/css/styles.min.css.map

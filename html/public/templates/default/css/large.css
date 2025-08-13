@@ -1,0 +1,24 @@
+@charset "UTF-8";
+/**
+ * Title: Custom CSS File
+ * Author URI: http://wayox.com
+ * Website: http://wayox.com
+ */
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) {
+	.btn-cta {
+		font-size: 30px;
+		padding: 10px 20px 4px;
+	}
+
+	.logo-resize {
+		width: 75%;
+	}
+
+	.responsive-text-align-3-cols,
+	.responsive-text-align-4-cols {
+		text-align: left;
+	}
+}
+

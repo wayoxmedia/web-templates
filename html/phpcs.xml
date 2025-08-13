@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ruleset name="wayoxStandard">
+  <!--
+    We will customize for this project with some specific parameters
+    At the end of this file, we will load the default ruleset
+    from our repository.
+  -->
+
+  <!-- Only lint files with the extension .php -->
+  <extensions>php</extensions>
+
+  <!-- Folders and files to include -->
+  <file>application/</file>
+  <file>tests/</file>
+
+  <!-- Folders and files to exclude -->
+  <exclude-pattern>*/config/*</exclude-pattern>
+  <exclude-pattern>*/logs/*</exclude-pattern>
+  <exclude-pattern>*/third_party/*</exclude-pattern>
+  <exclude-pattern>*/libraries/*.php</exclude-pattern>
+  <!-- Line below will exclude all 3 _ folders in tests folder -->
+  <exclude-pattern>tests/_*</exclude-pattern>
+
+  <arg name="colors"/>
+
+  <!-- Use the WayoxMedia PHP Coding Standard -->
+  <rule ref="./vendor/wayox-media-utilities/php-coding-standard">
+    <type>error</type>
+  </rule>
+</ruleset>

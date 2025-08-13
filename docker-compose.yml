@@ -1,0 +1,18 @@
+services:
+  template1:
+    image: template1:1.0.0
+    container_name: template1
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ./html:/var/www/html/
+      - ./secure:/var/www/secure/
+    ports:
+      - '${APP_PORT:-8010}:80'
+    networks:
+      - template1_net
+
+networks:
+  template1_net:
+    driver: bridge

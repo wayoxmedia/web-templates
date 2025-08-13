@@ -1,0 +1,59 @@
+@charset "UTF-8";
+/**
+ * Title: Custom CSS File
+ * Author URI: http://wayox.com
+ * Website: http://wayox.com
+ */
+
+/* X-Small devices (landscape phones, up to 576px)
+ * No Bootstrap media query for `xs` since this it's its default.
+ */
+@media (max-width: 575px) {
+	.btn-cta {
+		font-size: 15px;
+	}
+	.btn-x-small-red {
+		font-size: 20px;
+		margin-bottom: 0 !important;
+	}
+	.txt-x-small {
+		font-size: 10px;
+	}
+
+	.btn-arepas-container {
+		top: 0;
+	}
+
+	.logo-resize {
+		width: 45%;
+	}
+
+	.responsive-text-align-3-cols,
+	.responsive-text-align-4-cols {
+		text-align: center;
+	}
+
+	.section-title {
+		font-size: 3em;
+	}
+	.section-info {
+		padding: 0 0 30px 0;
+	}
+
+	.subscribe-height {
+		height: 155px;
+	}
+
+	.rounded {
+		border-radius: 0;
+	}
+
+	.subscribe-select-width {
+		width: 100%;
+	}
+
+	.footer-section {
+		text-align: center;
+	}
+}
+

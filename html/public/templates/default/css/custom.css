@@ -1,0 +1,222 @@
+@charset "UTF-8";
+/**
+ * Title: Custom CSS File
+ * Author URI: http://wayox.com
+ * Website: http://wayox.com
+ */
+
+/* Fonts */
+@import url('https://fonts.cdnfonts.com/css/amsi-pro-narw-ultra');
+
+@font-face {
+	font-family: 'Amsi Pro Narrow Regular';
+	src: url('../fonts/AmsiProNarw-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.btn-cta {
+	font-family: 'Amsi Pro Narw Ultra', sans-serif;
+	font-size: 30px;
+	padding: 10px 20px 4px;
+	text-transform: uppercase;
+	line-height: 1em;
+	cursor: pointer;
+	border-radius: 50px;
+	-webkit-transition: background 0.3s;
+	-moz-transition: background 0.3s;
+	-o-transition: background 0.3s;
+	transition: background 0.3s;
+}
+
+.btn-cta-red {
+	background-color: #fe0000;
+	color: #ffffff;
+	border: 1px solid #fe0000;
+}
+.btn-cta-red:hover {
+	background-color: #000000;
+	color: #fe0000;
+	border: 1px solid #000000;
+}
+
+.btn-cta-white {
+	background-color: #ffffff;
+	color: #fe0000;
+	border: 1px solid #ffffff;
+}
+
+.btn-cta-white:hover {
+	background-color: #000000;
+	color: #ffffff;
+	border: 1px solid #000000;
+}
+
+.btn-home-container {
+	position: absolute;
+	top: 65%;
+	left: 33%;
+}
+
+.arepa-combos-container {
+  position: relative;
+}
+
+.btn-arepas-container {
+	position: absolute;
+	top: 5%;
+	left: 62%;
+}
+
+.logo-resize {
+	width: 100%;
+	height: auto;
+}
+
+.responsive {
+	width: 100%;
+	height: auto;
+}
+
+.bgYellow {
+	background-color: #f7d117;
+}
+
+.bgRed {
+	background-color: #fe0000;
+}
+
+.bgTan {
+	background-color: #fcf5e5;
+}
+
+.spacer40 {
+	height: 40px;
+}
+
+.sub-title {
+	font-family: "Amsi Pro Narrow Regular", Arial, sans-serif;
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 1.1;
+	color: #666666;
+	text-rendering: optimizelegibility;
+}
+
+.col-title {
+	margin-top: 0;
+}
+
+.responsive-text-align-3-cols {
+	text-align: justify;
+}
+
+.responsive-text-align-4-cols {
+	text-align: justify;
+}
+
+.bottom-right-corner {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.image-centered {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.txt-x-small {
+	font-family: "Amsi Pro Narrow Regular", Arial, sans-serif;
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 1.1;
+	text-rendering: optimizelegibility;
+}
+
+.green,.success{color:#719A3F;}
+.yellow,.warning{color:#f5c023;}
+.red,.error{color:#FE0000;}
+.white{color: #ffffff;}
+
+.width-25 {width: 25%;}
+.width-50 {width: 50%;}
+.width-75 {width: 75%;}
+.width-100 {width: 100%;}
+
+.form-elements-inner-padding {
+	padding: 0 20px;
+}
+
+.left-rounded {
+	border-radius: 50px 0 0 50px;
+}
+
+.right-rounded {
+	border-radius: 0 50px 50px 0;
+}
+
+.rounded {
+	border-radius: 50px;
+}
+
+.subscribe-container {
+	height: 50px;
+}
+
+.subscribe-select-alignment {
+	float: right;
+	padding-top: 10px;
+	height: 50px;
+}
+
+.input-position-absolute {
+	position: absolute;
+	inset-inline-start: 0px;
+	inset-block-start: 10px;
+}
+
+.input-position-absolute::-webkit-input-placeholder {
+	color: white;
+}
+
+.input-position-absolute:-moz-placeholder {
+	color: white;
+}
+
+.input-position-absolute::-moz-placeholder {
+	color: white;
+}
+
+.input-position-absolute:-ms-input-placeholder {
+	color: white;
+}
+
+.subscribe-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	border: none;
+	background: transparent;
+	color: #fe0000;
+	font-weight: bold;
+	font-size: 28px;
+	cursor: pointer;
+	width: 100%;
+	text-align: center;
+}
+
+.subscribe-height {
+	height: 55px;
+}
+
+.subscribe-select-width {
+	width: 75%;
+}
+
+.subscribe-button-container {
+	height: 55px;
+	outline: 1px solid #f7d117;
+}
