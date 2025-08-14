@@ -10,12 +10,12 @@ $titleStr = (isset($title)) ? $title . ' - ' : '';
   <title><?= $titleStr . SITE_NAME ?> - My Store Panel</title>
   <!-- CSS -->
   <link rel="shortcut icon" type="image/png" href="../favicon.svg" />
-  <link rel="stylesheet" href="../static/admin/css/styles.min.css" />
+  <link rel="stylesheet" href="../public/admin/css/styles.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.bootstrap5.css" />
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.3/css/buttons.dataTables.css" />
-  <link rel="stylesheet" href="../static/admin/css/custom.css" />
+  <link rel="stylesheet" href="../public/admin/css/custom.css" />
 
   <!-- JS -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -34,6 +34,6 @@ $titleStr = (isset($title)) ? $title . ' - ' : '';
   <script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
   <script src="https://cdn.datatables.net/2.3.1/js/dataTables.bootstrap5.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-  <script type="module" src="../static/admin/js/global.js"></script>
-  <script type="module" src="../static/admin/js/isLoggedIn.js"></script>
+  <script type="module" src="../public/admin/js/global.js"></script>
+  <script type="module" src="../public/admin/js/isLoggedIn.js"></script>
 </head>

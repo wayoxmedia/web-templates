@@ -5,6 +5,7 @@ secure/*
 !.gitkeep
 !secure/config.sample.php
 !secure/config.js.php
+xinfo.php
 
 ########################
 ### IDE
@@ -43,4 +44,4 @@ html/node_modules/
 html/vendor/
 html/composer.lock
 html/tests/mocks/database/ci_test.sqlite
-html/static/admin/css/styles.min.css.map
+html/public/admin/css/styles.min.css.map

@@ -6,7 +6,7 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
           integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
           crossorigin="anonymous"></script>
-  <script type="module" src="../static/admin/js/isLoggedIn.js"></script>
+  <script type="module" src="../public/admin/js/isLoggedIn.js"></script>
   <title><?= SITE_NAME ?> - Redirecting...</title>
 </head>
 <body>

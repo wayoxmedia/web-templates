@@ -2,6 +2,10 @@
 
 @section('title', 'Admin Login')
 
+@section('SITE_URL', 'Eglee Admin')
+
+@section('SITE_NAME', 'Eglee Admin')
+
 @section('content')
   <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
