@@ -1,5 +1,5 @@
 define( [
-	"./core.js",
+	"./core",
 	"./core/nodeName",
 	"./core/camelCase",
 	"./core/toType",

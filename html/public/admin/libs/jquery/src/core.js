@@ -3,7 +3,7 @@
 // unguarded in another place, it seems safer to define global only for this module
 
 define( [
-	"./var/arr.js",
+	"./var/arr",
 	"./var/getProto",
 	"./var/slice",
 	"./var/flat",

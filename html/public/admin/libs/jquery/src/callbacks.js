@@ -1,5 +1,5 @@
 define( [
-	"./core.js",
+	"./core",
 	"./core/toType",
 	"./var/isFunction",
 	"./var/rnothtmlwhite"

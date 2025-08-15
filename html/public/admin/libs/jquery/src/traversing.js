@@ -1,5 +1,5 @@
 define( [
-	"./core.js",
+	"./core",
 	"./var/getProto",
 	"./var/indexOf",
 	"./traversing/var/dir",

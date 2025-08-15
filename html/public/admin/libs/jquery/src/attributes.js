@@ -1,5 +1,5 @@
 define( [
-	"./core.js",
+	"./core",
 	"./attributes/attr",
 	"./attributes/prop",
 	"./attributes/classes",

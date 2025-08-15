@@ -1,5 +1,5 @@
 define( [
-	"../var/rnothtmlwhite.js"
+	"../var/rnothtmlwhite"
 ], function( rnothtmlwhite ) {
 	"use strict";
 
