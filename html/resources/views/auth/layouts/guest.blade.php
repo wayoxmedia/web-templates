@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta -->
+  {{-- Meta --}}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>@yield('title', 'My Store Panel')</title>
 
-  <!-- Google Fonts -->
+  {{-- Google Fonts --}}
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
+  {{-- CSS --}}
   <link rel="shortcut icon" type="image/png" href="{{ asset('templates/default/img/favicon.svg') }}" />
   <link rel="stylesheet" href="{{ asset('admin/css/styles.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}" />
 
-  <!-- JS -->
+  {{-- JS --}}
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
           integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
           crossorigin="anonymous"></script>
@@ -24,19 +24,11 @@
           integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
           crossorigin="anonymous"></script>
   <script type="module" src="{{ asset('admin/js/global.js') }}"></script>
-  <script type="module" src="{{ asset('admin/js/login.js') }}"></script>
-
-  <style>
-    body { background-color: #f0f2f5; }
-    .container-narrow { max-width: 720px; }
-    .auth-wrapper { min-height: 100vh; display: grid; place-items: center; }
-    .brand { font-weight: 700; letter-spacing: .2px; }
-  </style>
 
   @stack('head')
 </head>
 <body>
-<!--  Body Wrapper -->
+{{-- Body Wrapper --}}
 <div class="page-wrapper"
      id="main-wrapper"
      data-layout="vertical"
@@ -55,43 +47,7 @@
                 <img src="{{ asset('templates/default/img/eglita_ok.png') }}" alt="">
               </a>
               <p class="text-center">@yield('SITE_NAME', 'My Store Panel')</p>
-              <form id="loginForm">
-                <div class="mb-3">
-                  <label for="iptEmail"
-                         class="form-label">Email</label>
-                  <input type="email"
-                         class="form-control"
-                         id="iptEmail"
-                         name="email"
-                         required
-                         aria-describedby="emailHelp">
-                </div>
-                <div class="mb-4">
-                  <label for="iptPassword"
-                         class="form-label">Password</label>
-                  <input type="password"
-                         class="form-control"
-                         name="password"
-                         required
-                         id="iptPassword">
-                </div>
-                <div class="d-flex align-items-center justify-content-between mb-4">
-                  <div class="form-check">
-                    <input class="form-check-input primary"
-                           type="checkbox"
-                           value=""
-                           id="flexCheckChecked"
-                           checked>
-                    <label class="form-check-label text-dark"
-                           for="flexCheckChecked">Remember me</label>
-                  </div>
-                  <a class="text-primary fw-bold"
-                     href="forgot.php">Forgot Password?</a>
-                </div>
-                <button type="submit"
-                        id="btnSubmit"
-                        class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
-              </form>
+              @yield('content')
             </div>
           </div>
         </div>

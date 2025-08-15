@@ -11,9 +11,9 @@
 @endpush
 
 @section('content')
-  @include('auth.partials.loginForm')
+{{--  @include('auth.partials.forgotForm')--}}
 @endsection
 
 @push('scripts')
-  <script type="module" src="{{ asset('admin/js/login.js') }}"></script>
+  <script type="module" src="{{ asset('admin/js/forgot.js') }}"></script>
 @endpush

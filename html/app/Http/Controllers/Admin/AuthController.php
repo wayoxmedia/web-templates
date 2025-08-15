@@ -29,6 +29,9 @@ class AuthController extends Controller
 
   /**
    * Show the login form.
+   *
+   * @param Request $request
+   * @return View|RedirectResponse
    */
   public function showLogin(Request $request): View|RedirectResponse
   {
@@ -40,7 +43,19 @@ class AuthController extends Controller
   }
 
   /**
+   * Show the "forgot password" form.
+   *
+   * @return View
+   */
+  public function showForgot(): View {
+    return view('auth.pages.forgot');
+  }
+
+  /**
    * Handle login submission and persist auth data in session.
+   *
+   * @param Request $request
+   * @return RedirectResponse
    * @throws ValidationException|ConnectionException
    */
   public function submitLogin(Request $request): RedirectResponse
@@ -54,6 +69,15 @@ class AuthController extends Controller
       $resp = $this->client->login($validated['email'], $validated['password']);
     } catch (RequestException $e) {
       // Backend returned non-2xx or is unreachable
+      logger()->warning(
+        'Login failed for email:' . $validated['email'] . ' with message: ' . $e->getMessage(),
+        [
+          'trace'   => $e->getTraceAsString(),
+          'code'    => $e->getCode(),
+          'status'  => $e->response?->status(),
+          'response'=> $e->response?->body(),
+        ]
+      );
       throw ValidationException::withMessages([
         'email' => __('Authentication failed. Please check your credentials.'),
       ]);

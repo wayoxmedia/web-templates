@@ -35,8 +35,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
   // Public: Login (GET form / POST submit)
   Route::get('/login', [AuthController::class, 'showLogin'])
     ->name('login');
+  Route::get('/forgot', [AuthController::class, 'showForgot'])
+    ->name('forgot');
+  // Submitting login via POST to avoid CSRF via link spoofing
   Route::post('/login', [AuthController::class, 'submitLogin'])
-    ->name('login.submit');
+    ->name('login.submit');// ← name = admin.login.submit
 
   // Protected area (requires JWT auth).
   Route::middleware('ensure.jwt')->group(function () {

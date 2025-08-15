@@ -49,3 +49,30 @@ $(document).ready(function () {
     });
   });
 });
+
+/*
+// Check if needed, this is for the admin login page
+document.addEventListener('DOMContentLoaded', function () {
+  // Prevent double submissions
+  const form = document.querySelector('form[action="login.php"]');
+  const btn  = document.getElementById('loginBtn');
+  if (form && btn) {
+    form.addEventListener('submit', function () {
+      btn.setAttribute('disabled', 'disabled');
+    });
+  }
+
+  // Simple password visibility toggle
+  const toggleBtn  = document.getElementById('togglePassword');
+  const toggleIcon = document.getElementById('toggleIcon');
+  const pwdInput   = document.getElementById('password');
+
+  if (toggleBtn && toggleIcon && pwdInput) {
+    toggleBtn.addEventListener('click', function () {
+      const isText = pwdInput.getAttribute('type') === 'text';
+      pwdInput.setAttribute('type', isText ? 'password' : 'text');
+      toggleIcon.textContent = isText ? 'Show' : 'Hide';
+    });
+  }
+});
+*/
