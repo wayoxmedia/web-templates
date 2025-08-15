@@ -1,6 +1,6 @@
-import { msaConfig } from './config.js.php';
-import { checkIfLoggedIn, clearToken, logout, refreshIfNearExpiry } from './utils/loginUtilities.js';
-import { hideSpinner, showSpinner } from "./global.js";
+import { msaConfig } from '../../global/js/config.js.php';
+import { checkIfLoggedIn, clearToken, logout, refreshIfNearExpiry } from '../../admin/js/utils/loginUtilities.js';
+import { hideSpinner, showSpinner } from "../../global/js/global.js";
 
 /**
  * On Document Ready,

@@ -34,6 +34,6 @@ $titleStr = (isset($title)) ? $title . ' - ' : '';
   <script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.print.min.js"></script>
   <script src="https://cdn.datatables.net/2.3.1/js/dataTables.bootstrap5.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-  <script type="module" src="../public/admin/js/global.js"></script>
-  <script type="module" src="../public/admin/js/isLoggedIn.js"></script>
+  <script type="module" src="../public/global/js/global.js"></script>
+  <script type="module" src="../public/auth/js/isLoggedIn.js"></script>
 </head>

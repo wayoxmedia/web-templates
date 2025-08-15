@@ -1,5 +1,5 @@
-import * as gbl from "./global.js";
-import { msaConfig } from "./config.js.php";
+import * as gbl from "../../global/js/global.js";
+import { msaConfig } from "../../global/js/config.js.php";
 
 $(document).ready(function () {
   async function initializeDataTable() {

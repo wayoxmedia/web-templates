@@ -8,6 +8,14 @@
 
 @push('head')
   <meta name="robots" content="noindex,nofollow">
+  <style>
+    .tooltip[data-popper-placement^="top"] {
+      margin-bottom: 20px !important;
+    }
+    .min-h-50 {
+      min-height: 50px !important;
+    }
+  </style>
 @endpush
 
 @section('content')
@@ -15,5 +23,5 @@
 @endsection
 
 @push('scripts')
-  <script type="module" src="{{ asset('admin/js/login.js') }}"></script>
+  <script type="module" src="{{ asset('auth/js/login.js') }}"></script>
 @endpush
