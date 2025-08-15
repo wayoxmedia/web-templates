@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../core/isAttached",
 	"./var/rboxStyle",
 	"./var/rnumnonpx",

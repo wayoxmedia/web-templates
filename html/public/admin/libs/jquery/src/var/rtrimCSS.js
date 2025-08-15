@@ -1,5 +1,5 @@
 define( [
-	"./whitespace.js"
+	"./whitespace"
 ], function( whitespace ) {
 
 "use strict";

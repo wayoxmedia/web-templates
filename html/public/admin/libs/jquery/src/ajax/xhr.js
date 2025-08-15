@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../var/support",
 	"../ajax"
 ], function( jQuery, support ) {

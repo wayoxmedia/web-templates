@@ -1,5 +1,5 @@
 define( [
-	"./arr.js"
+	"./arr"
 ], function( arr ) {
 
 "use strict";

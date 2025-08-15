@@ -1,5 +1,5 @@
 define( [
-	"../Data.js"
+	"../Data"
 ], function( Data ) {
 	"use strict";
 

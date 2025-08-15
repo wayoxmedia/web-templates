@@ -1,5 +1,5 @@
 define( [
-	"../var/document","
+	"../var/document",
 	"../core"
 ], function( document, jQuery ) {
 

@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../var/document",
 	"../data/var/dataPriv",
 	"../data/var/acceptData",

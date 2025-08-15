@@ -1,6 +1,6 @@
 // Initialize a jQuery object
 define( [
-	"../core.js",
+	"../core",
 	"../var/document",
 	"../var/isFunction",
 	"./var/rsingleTag",

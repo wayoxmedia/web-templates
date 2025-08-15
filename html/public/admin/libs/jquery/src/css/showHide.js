@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../data/var/dataPriv",
 	"../css/var/isHiddenWithinTree"
 ], function( jQuery, dataPriv, isHiddenWithinTree ) {

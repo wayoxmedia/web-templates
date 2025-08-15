@@ -1,5 +1,5 @@
 define( [
-	"../ajax.js"
+	"../ajax"
 ], function( jQuery ) {
 
 "use strict";

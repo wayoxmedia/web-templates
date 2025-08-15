@@ -1,5 +1,5 @@
 define( [
-	"../../var/pnum.js"
+	"../../var/pnum"
 ], function( pnum ) {
 	"use strict";
 

@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../core/toType",
 	"../core/isAttached",
 	"./var/rtagName",

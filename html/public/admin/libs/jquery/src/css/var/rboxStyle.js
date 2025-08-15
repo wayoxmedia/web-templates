@@ -1,5 +1,5 @@
 define( [
-	"./cssExpand.js"
+	"./cssExpand"
 ], function( cssExpand ) {
 	"use strict";
 

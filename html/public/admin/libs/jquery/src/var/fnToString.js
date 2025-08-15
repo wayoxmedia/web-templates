@@ -1,5 +1,5 @@
 define( [
-	"./hasOwn.js"
+	"./hasOwn"
 ], function( hasOwn ) {
 	"use strict";
 

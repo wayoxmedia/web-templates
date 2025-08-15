@@ -15,7 +15,7 @@ $(document).ready(function () {
   const $btnSubmit = $('#btnSubmit');
 
   // On start, ensure button is disabled. Will be enabled on input change.
-  //$btnSubmit.attr('disabled', 'disabled');
+  $btnSubmit.attr('disabled', 'disabled');
 
   const $email = $('#iptEmail');
   const $password = $('#iptPassword');
@@ -53,7 +53,7 @@ $(document).ready(function () {
     });
   }
   // Enable button when inputs change.
-  /*$inputs.on('input', function () {
+  $inputs.on('input', function () {
     if ($email.val().length >=6 && $password.val().length >= 8) {
       $btnSubmit.prop("disabled", false);
       disableTooltip();
@@ -62,11 +62,14 @@ $(document).ready(function () {
       $btnSubmit.prop("disabled", true);
       enableTooltip();
     }
-  });*/
+  });
 
   // Handle form submission.
   $form.on('submit', function (e) {
     e.preventDefault();
+    // Disable the submit button to prevent multiple clicks.
+    $btnSubmit.prop("disabled", true);
+
     // Reset error display.
     $errorDisplay.addClass('d-none');
     $errorDisplay.html('');
@@ -75,26 +78,28 @@ $(document).ready(function () {
     const password = $password.val();
 
     // Validate inputs.
-    /*if (!email || !password) {
-      $errorDisplay.removeClass('d-none'); // removes old message, if any.
-      $errorDisplay.html('Please enter both email and password.');
+    if (!email || !password) {
+      showErrorsInForm('Please enter both email and password.');
       return;
     }
 
     // Check if email is valid
     if (!isValidEmail(email)) {
-      $errorDisplay.removeClass('d-none'); // removes old message, if any.
-      $errorDisplay.html('Please enter a valid email address.');
+      showErrorsInForm('Please enter a valid email address.')
+      return;
+    }
+
+    // Check email length.
+    if (email.length < 6) {
+      showErrorsInForm('Email must be at least 6 characters long.');
       return;
     }
 
     // Check password length.
     if (password.length < 8) {
-      $errorDisplay.removeClass('d-none'); // removes old message, if any.
-      $errorDisplay.html('Password must be at least 8 characters long.');
+      showErrorsInForm('Password must be at least 8 characters long.');
       return;
     }
-    */
 
     // Remember me functionality
     if ($chkRememberMe.is(":checked")) {
@@ -104,6 +109,9 @@ $(document).ready(function () {
     }
 
     // All good, submit the form.
+    showSpinner();
+    $btnSubmit.text('Logging in...');
+    $form.off('submit').submit();
 
     /* Via Ajax, to avoid page reload.
     let data = JSON.stringify({
@@ -143,10 +151,6 @@ $(document).ready(function () {
       }
     });
     */
-
-    showSpinner();
-    $btnSubmit.text('Logging in...');
-    $form.off('submit').submit();
   });
 
   /*********
@@ -164,18 +168,10 @@ $(document).ready(function () {
       tooltipInstance = null;
     }
   }
-});
 
-/*
-// Check if needed, this is for the admin login page
-document.addEventListener('DOMContentLoaded', function () {
-  // Prevent double submissions
-  const form = document.querySelector('form[action="login.php"]');
-  const btn  = document.getElementById('btnSubmit');
-  if (form && btn) {
-    form.addEventListener('submit', function () {
-      btn.setAttribute('disabled', 'disabled');
-    });
+  function showErrorsInForm(msg) {
+    $errorDisplay.removeClass('d-none'); // removes old message, if any.
+    $errorDisplay.html(msg);
+    $btnSubmit.prop("disabled", false); // Re-enable button on error.
   }
 });
-*/

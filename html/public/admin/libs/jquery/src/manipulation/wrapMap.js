@@ -1,5 +1,5 @@
 define( [
-	"./support.js"
+	"./support"
 ], function( support ) {
 
 "use strict";

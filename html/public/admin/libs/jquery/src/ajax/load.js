@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../core/stripAndCollapse",
 	"../var/isFunction",
 	"../core/parseHTML",

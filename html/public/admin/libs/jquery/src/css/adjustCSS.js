@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../var/rcssNum"
 ], function( jQuery, rcssNum ) {
 

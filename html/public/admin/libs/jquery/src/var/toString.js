@@ -1,5 +1,5 @@
 define( [
-	"./class2type.js"
+	"./class2type"
 ], function( class2type ) {
 	"use strict";
 

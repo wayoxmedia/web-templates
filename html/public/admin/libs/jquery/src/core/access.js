@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../core/toType",
 	"../var/isFunction"
 ], function( jQuery, toType, isFunction ) {

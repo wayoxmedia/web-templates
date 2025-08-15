@@ -1,5 +1,5 @@
 define( [
-	"../core.js",
+	"../core",
 	"../css/finalPropName",
 
 	"../css"

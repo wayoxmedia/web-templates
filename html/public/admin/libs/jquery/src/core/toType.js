@@ -1,5 +1,5 @@
 define( [
-	"../var/class2type.js",
+	"../var/class2type",
 	"../var/toString"
 ], function( class2type, toString ) {
 

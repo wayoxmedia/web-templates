@@ -1,5 +1,5 @@
 define( [
-	"../data/var/dataPriv.js"
+	"../data/var/dataPriv"
 ], function( dataPriv ) {
 
 "use strict";
