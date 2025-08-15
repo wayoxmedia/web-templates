@@ -1,5 +1,5 @@
 define( [
-	"./fnToString.js"
+	"./fnToString"
 ], function( fnToString ) {
 	"use strict";
 

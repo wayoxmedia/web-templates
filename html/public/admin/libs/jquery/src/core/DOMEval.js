@@ -1,5 +1,5 @@
 define( [
-	"../var/document.js"
+	"../var/document"
 ], function( document ) {
 	"use strict";
 
