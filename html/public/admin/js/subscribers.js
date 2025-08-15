@@ -1,22 +1,33 @@
-import * as gbl from "./global.js";
-import {msaConfig} from "./config.js.php";
+import * as gbl from "../../global/js/global.js";
+import { msaConfig } from "../../global/js/config.js.php";
 
 $(document).ready(function () {
   async function initializeDataTable() {
     gbl.showSpinner();
     // Get data
-    const dataResponse = await fetch(msaConfig.apiUrl + "/contacts");
+    const dataResponse = await fetch(msaConfig.apiUrl + "/subscribers");
     const data = await dataResponse.json();
 
     // Associate records with geolocations
     data.data = gbl.processGeolocationDataFromArrayOfItems(data.data, 'geo_location');
 
-    new DataTable('#contacts_list', {
+    new DataTable('#subscribers_list', {
       data: data.data,
       columns: [
-        {data: 'name'},
-        {data: 'email'},
-        {data: 'message', className: 'limited-width'},
+        {data: 'address'},
+        {
+          data: 'address_type',
+          render: function (data) {
+            if (data === 'e') {
+              return 'Email';
+            } else if (data === 'p') {
+              return 'Telephone';
+            } else {
+              return 'Unknown "' + data + '"';
+            }
+          }
+        },
+        {data: 'user_ip'},
         {data: 'geoData'},
       ],
       layout: {
@@ -57,10 +68,12 @@ $(document).ready(function () {
                 $(node).removeClass('dt-button buttons-csv buttons-html5');
                 $(node).attr('id', 'csvButton');
               },
-              title: gbl.reportFilename('ContactMessages', dayjs().format('YYYY-MM-DD'), null, null),
+              title: gbl.reportFilename('SubscribersList', dayjs().format('YYYY-MM-DD'), null, null),
               customize: function (csv) {
+                const type = document.getElementById('selSubscriptionType').value;
                 let csvHeader = "Store: " + msaConfig.siteName + "\n" +
-                  "Contact Messages\n" +
+                  "Subscribers List\n" +
+                  "For Subscription Type: " + type + "\n" +
                   "For Date: " + dayjs().format('YYYY-MM-DD') + "\n\n";
                 return csvHeader + csv;
               }
@@ -97,8 +110,6 @@ $(document).ready(function () {
           }
         ],
       },
-      responsive: true,
-      scrollX: false,
       ordering: true,
       order: [[1, "desc"]]
     })
@@ -106,7 +117,7 @@ $(document).ready(function () {
 
   initializeDataTable()
   .then(() => {
-    console.log("Contacts DataTable initialized successfully.");
+    console.log("Subscribers DataTable initialized successfully.");
   })
   .catch(e => {
     console.log("Error initializing DataTable:", e);

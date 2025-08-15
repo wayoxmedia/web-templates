@@ -1,5 +1,5 @@
-import { msaConfig } from './config.js.php';
-import { hideSpinner, showSpinner } from './global.js';
+import { msaConfig } from '../../global/js/config.js.php';
+import { hideSpinner, showSpinner } from '../../global/js/global.js';
 
 $(document).ready(function () {
   // Handle form submission
@@ -7,16 +7,14 @@ $(document).ready(function () {
     e.preventDefault();
 
     let email = $('#iptEmail').val();
-    let password = $('#iptPassword').val();
     let data = JSON.stringify({
-      email: email,
-      password: password
+      email: email
     });
 
     let btnSubmit = $('#btnSubmit');
     btnSubmit.attr('disabled', true); // Disable button to prevent multiple clicks
     $.ajax({
-      url: msaConfig.apiUrl + '/auth/login',
+      url: msaConfig.apiUrl + '/auth/forgot',
       method: 'POST',
       contentType: 'application/json',
       dataType: 'json',
@@ -27,7 +25,6 @@ $(document).ready(function () {
         btnSubmit.text('Logging in...');
       },
       success: function (res) {
-        hideSpinner();
         // Save token in localStorage
         // TODO: rename to 'token_XXX' (the store name or id) using a var from config.
         localStorage.setItem('token', res['access_token']);
@@ -36,7 +33,6 @@ $(document).ready(function () {
         window.location.href = 'dashboard.php'; // Redirect OK.
       },
       error: function (xhr) {
-        hideSpinner();
         btnSubmit.text('Sign In');
         console.log('❌ Error de login:', xhr);
         $('form').after(
@@ -45,6 +41,9 @@ $(document).ready(function () {
          </div>`
         );
         btnSubmit.attr('disabled', false); // Re-enable button on error.
+      },
+      complete: function () {
+        hideSpinner();
       }
     });
   });

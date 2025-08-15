@@ -33,6 +33,6 @@ include("head.php"); ?>
   </div>
 </div>
 <?php include("foot.php"); ?>
-<script type="module" src="../static/admin/js/contacts.js"></script>
+<script type="module" src="../public/admin/js/contacts.js"></script>
 </body>
 </html>

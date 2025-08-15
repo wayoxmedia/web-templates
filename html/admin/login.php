@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <!-- CSS -->
-  <link rel="shortcut icon" type="image/png" href="../favicon.svg" />
-  <link rel="stylesheet" href="../static/admin/css/styles.min.css" />
-  <link rel="stylesheet" href="../static/admin/css/custom.css" />
+  <link rel="shortcut icon" type="image/png" href="../public/templates/default/img/favicon.svg" />
+  <link rel="stylesheet" href="../public/admin/css/styles.min.css" />
+  <link rel="stylesheet" href="../public/admin/css/custom.css" />
 
   <!-- JS -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -20,8 +20,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
           integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
           crossorigin="anonymous"></script>
-  <script type="module" src="../static/admin/js/global.js"></script>
-  <script type="module" src="../static/admin/js/login.js"></script>
+  <script type="module" src="../public/global/js/global.js"></script>
+  <script type="module" src="../public/auth/js/login.js"></script>
 </head>
 
 <body>
@@ -90,7 +90,7 @@
 </div>
 <div id="global-spinner-overlay" style="display: none;">
   <div id="spinner">
-    <img src="../static/admin/img/loading.gif" alt="Loading..." class="spinner-img">
+    <img src="../public/admin/img/loading.gif" alt="Loading..." class="spinner-img">
     <p class="text-loading">Logging in...</p>
   </div>
 </div>

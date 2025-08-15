@@ -1,5 +1,5 @@
-import {msaConfig} from '../config.js.php';
-import {hideSpinner, showSpinner} from '../global.js';
+import {msaConfig} from '../../../global/js/config.js.php';
+import {hideSpinner, showSpinner} from '../../../global/js/global.js';
 
 /**
  * Check if the user is logged in

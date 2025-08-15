@@ -1,72 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta -->
+  {{-- Meta --}}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>@yield('title', 'Sign in')</title>
+  <title>@yield('title', 'My Store Panel')</title>
 
-  <!-- Styles: Bootstrap via CDN -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-    crossorigin="anonymous">
+  {{-- Google Fonts --}}
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <style>
-    body { background-color: #f0f2f5; }
-    .container-narrow { max-width: 720px; }
-    .auth-wrapper { min-height: 100vh; display: grid; place-items: center; }
-    .brand { font-weight: 700; letter-spacing: .2px; }
-  </style>
+  {{-- CSS --}}
+  <link rel="shortcut icon" type="image/png" href="{{ asset('templates/default/img/favicon.svg') }}" />
+  <link rel="stylesheet" href="{{ asset('admin/css/styles.min.css') }}" />
+  <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}" />
+
+  {{-- JS --}}
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
+  <script type="module" src="{{ asset('global/js/global.js') }}"></script>
 
   @stack('head')
 </head>
 <body>
-<div class="auth-wrapper">
-  <main class="container container-narrow">
-    <div class="text-center mb-4">
-      <a href="{{ url('/') }}" class="text-decoration-none text-dark">
-        <span class="brand">MyStore</span>
-      </a>
+{{-- Body Wrapper --}}
+<div class="page-wrapper"
+     id="main-wrapper"
+     data-layout="vertical"
+     data-navbarbg="skin6"
+     data-sidebartype="full"
+     data-sidebar-position="fixed"
+     data-header-position="fixed">
+  <div class="position-relative overflow-hidden text-bg-light min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="d-flex align-items-center justify-content-center w-100">
+      <div class="row justify-content-center w-100">
+        <div class="col-md-8 col-lg-6 col-xxl-3">
+          <div class="card mb-0">
+            <div class="card-body">
+              <a href="@yield('SITE_URL', 'My Store Panel')"
+                 class="text-nowrap logo-img text-center d-block py-3 w-100">
+                <img src="{{ asset('templates/default/img/eglita_ok.png') }}" alt="">
+              </a>
+              <p class="text-center">@yield('SITE_NAME', 'My Store Panel')</p>
+              @yield('content')
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    {{-- Flash / errors --}}
-    @if (session('status'))
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('status') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    @endif
-
-    @if ($errors->any())
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <div class="fw-semibold mb-1">Please fix the following errors:</div>
-        <ul class="mb-0">
-          @foreach ($errors->all() as $error)
-            <li class="small">{{ $error }}</li>
-          @endforeach
-        </ul>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-    @endif
-
-    @yield('content')
-
-    <p class="text-center text-muted small mt-4 mb-0">
-      &copy; {{ date('Y') }} MyStore
-    </p>
-  </main>
+  </div>
 </div>
-
-<!-- Scripts: Bootstrap via CDN -->
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-VjEeSF2cArB+9mGk4rVw9f3rE+7v2jK8ALHq5X9J3XbID0Yk4K+f4S9JzJ8x0m9E"
-  crossorigin="anonymous"></script>
-
+<div id="global-spinner-overlay" style="display: none;">
+  <div id="spinner">
+    <img src="{{ asset('admin/img/loading.gif') }}"
+         alt="Loading..."
+         class="spinner-img">
+    <p class="text-loading">Logging in...</p>
+  </div>
+</div>
 @stack('scripts')
 </body>
 </html>

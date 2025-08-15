@@ -103,3 +103,14 @@ export function isValidJson(data) {
   }
   return typeof test === 'object' && data !== null;
 }
+
+/**
+ * Validate email format.
+ *
+ * @param {string} email - The email address to validate.
+ * @returns {boolean}
+ */
+export function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}

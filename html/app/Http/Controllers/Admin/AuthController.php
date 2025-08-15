@@ -29,6 +29,9 @@ class AuthController extends Controller
 
   /**
    * Show the login form.
+   *
+   * @param Request $request
+   * @return View|RedirectResponse
    */
   public function showLogin(Request $request): View|RedirectResponse
   {
@@ -40,13 +43,25 @@ class AuthController extends Controller
   }
 
   /**
+   * Show the "forgot password" form.
+   *
+   * @return View
+   */
+  public function showForgot(): View {
+    return view('auth.pages.forgot');
+  }
+
+  /**
    * Handle login submission and persist auth data in session.
+   *
+   * @param Request $request
+   * @return RedirectResponse
    * @throws ValidationException|ConnectionException
    */
   public function submitLogin(Request $request): RedirectResponse
   {
     $validated = $request->validate([
-      'email'    => ['required', 'string', 'email'],
+      'email'    => ['required', 'string', 'email', 'min:6'],
       'password' => ['required', 'string', 'min:8'],
     ]);
 
@@ -54,9 +69,34 @@ class AuthController extends Controller
       $resp = $this->client->login($validated['email'], $validated['password']);
     } catch (RequestException $e) {
       // Backend returned non-2xx or is unreachable
+      // Process error and show generic message to avoid leaking information
+      $status = $e->response?->status();
+      logger()->warning(
+        'Login failed',
+        [
+          'email'  => $validated['email'],
+          'code'   => $e->getCode(),
+          'status' => $status,
+          //'trace'    => $e->getTraceAsString(),
+          //'response' => $e->response?->body(),
+        ]
+      );
+
+      // Prefer a friendly message; fallback if backend didn’t send 'error'.
+      $backendMsg = data_get($e->response?->json(), 'error');
+
+      // Map common statuses to nicer messages.
+      $friendly = match ($status) {
+        401 => __('Authentication failed. Please check your credentials.'),
+        429 => __('Too many attempts. Please try again in a moment.'),
+        503, 502, 504 => __('Service unavailable. Please try again shortly.'),
+        default => __('Unexpected error. Please try again.'),
+      };
+
       throw ValidationException::withMessages([
-        'email' => __('Authentication failed. Please check your credentials.'),
-      ]);
+        // "credentials" is a pseudo-field we will render in #login-error
+        'credentials' => $backendMsg ?: $friendly,
+      ])->redirectTo(url()->previous()); // keeps standard back() behavior
     }
 
     $this->storeAuthInSession($resp);

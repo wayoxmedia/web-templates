@@ -61,18 +61,18 @@ class BackendApi
     return Cache::remember($key, $this->cacheTtl, function () use ($domain) {
       try {
         $res = $this->client()->get('sites/resolve', ['domain' => $domain]);
-        /*
-        logger()->debug('API call', [
-          'status' => $res->status(),
-          'url'    => $res->handlerStats()['url'] ?? null, // URL final que se llamó
-          'uri'    => method_exists($res, 'effectiveUri') ? (string) $res->effectiveUri() : 'n/a',
-          'body'   => $res->body(),
-        ]);
-        */
+        logger()->debug(
+          'API call at ' . __METHOD__ . '() in ' . __FILE__ . ':' . __LINE__,
+          [
+            'status' => $res->status(),
+            'url'    => $res->handlerStats()['url'] ?? null, // Final URL called.
+            'uri'    => method_exists($res, 'effectiveUri') ? (string) $res->effectiveUri() : 'n/a',
+            'body'   => $res->body(),
+          ]
+        );
         $res->throw();
         return $res->json();
       } catch (ConnectionException|RequestException $e) {
-        // You may log the exception here
         logger()->error(
           'API call failed at ' . __METHOD__ . '() in ' . __FILE__ . ':' . __LINE__,
           ['exception' => $e->getMessage()]
@@ -88,7 +88,9 @@ class BackendApi
    * Expected response shape:
    * {
    *   "page": {
-   *     "id": 123, "slug": "/", "title": "Home",
+   *     "id": 123,
+   *     "slug": "/",
+   *     "title": "Home",
    *     "content": { "hero": {...}, "features": [...] },
    *     "meta_title": "Home | Acme",
    *     "meta_description": "..."
@@ -116,14 +118,12 @@ class BackendApi
     return Cache::remember($key, $this->cacheTtl, function () use ($tenantId, $norm) {
       try {
         $res = $this->client()->get("tenants/{$tenantId}/pages", ['slug' => $norm]);
-        /**/
         logger()->debug('API call', [
           'status' => $res->status(),
           'url'    => $res->handlerStats()['url'] ?? null, // URL final que se llamó
           'uri'    => method_exists($res, 'effectiveUri') ? (string) $res->effectiveUri() : 'n/a',
           'body'   => $res->body(),
         ]);
-        /**/
         $res->throw();
         return $res->json();
       } catch (ConnectionException|RequestException $e) {
