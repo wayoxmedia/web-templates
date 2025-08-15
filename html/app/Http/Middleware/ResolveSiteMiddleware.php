@@ -86,9 +86,8 @@ class ResolveSiteMiddleware
     app()->instance('theme_settings', $settings);
 
     // Register theme view namespaces
-    $templateSlug = $template['slug'];
-    $themePath    = resource_path("views/templates/{$templateSlug}");
-    $basePath     = resource_path('views/templates/default');
+    $themePath = resource_path("views/templates/{$templateSlug}");
+    $basePath  = resource_path('views/templates/default');
 
     View::replaceNamespace('theme', [$themePath, $basePath]);
     View::replaceNamespace('themeBase', [$basePath]);
