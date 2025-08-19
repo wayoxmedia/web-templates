@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Services\BackendApi;
+use App\Support\SiteContext;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -11,12 +12,16 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Middleware to resolve the site based on the incoming request's domain.
  *
+ * Using readonly property to ensure immutability after construction
+ *
  * This middleware performs the following steps:
  * 1. Normalizes the host by stripping "www." if present.
  * 2. Calls the Backend API to resolve the site using the normalized domain.
- * 3. Injects the resolved tenant, template, site, and settings into the service container.
- * 4. Registers view namespaces for the active theme and a base fallback theme.
- * 5. Proceeds with the next middleware or request handler.
+ * 3. If the site is found, it retrieves tenant, template, site, and settings from Session.
+ * 4.  If the site cannot be resolved, it aborts with a 404 error.
+ * 5. Injects the resolved tenant, template, site, and settings into the service container.
+ * 6. Registers view namespaces for the active theme and a base fallback theme.
+ * 7. Proceeds with the next middleware or request handler.
  * If the site cannot be resolved, it aborts with a 404 error.
  *
  * Visual flow:
@@ -44,8 +49,15 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * [User receive HTML with assigned template]
  */
-class ResolveSiteMiddleware
+readonly class ResolveSiteMiddleware
 {
+  /**
+   * Create a new middleware instance.
+   *
+   * @param BackendApi $api The backend API service to resolve sites.
+   */
+  public function __construct(private BackendApi $api) {}
+
   /**
    * Handle incoming request by resolving site via Backend API.
    * Steps:
@@ -56,17 +68,17 @@ class ResolveSiteMiddleware
    */
   public function handle(Request $request, Closure $next): Response
   {
-    $host = $request->getHost();
-    $normalizedHost = preg_replace('/^www\./i', '', $host);
+    $host   = strtolower($request->getHost());
+    $domain = preg_replace('/^www\./i', '', $host) ?: $host;
 
-    /** @var BackendApi $api */
-    $api = app(BackendApi::class);
+    $ctx = SiteContext::remember($this->api, $domain, 600);
 
-    $payload = $api->resolveSiteByDomain($normalizedHost);
+    $resolved = $ctx['data'] ?? $ctx;
 
-    $resolved = $payload['data'] ?? $payload;
-
-    if (! $resolved || ! isset($resolved['tenant'], $resolved['template'], $resolved['site'])) {
+    if (!$resolved ||
+      !is_array($resolved) ||
+      ! isset($resolved['tenant'], $resolved['template'], $resolved['site'])
+    ) {
       abort(404, 'Site not found for this domain.');
     }
 

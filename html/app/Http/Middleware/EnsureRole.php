@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureRole
 {
-  private const SESSION_ROLES = 'auth.roles';
+  private const SESSION_BACKEND_ROLES = 'auth.roles';
 
   /**
    * Require that the current session has at least one of the given roles.
@@ -32,7 +32,7 @@ class EnsureRole
     }
     $required = array_values(array_unique(array_filter($required)));
 
-    $userRoles = array_map('strval', (array) Session::get(self::SESSION_ROLES, []));
+    $userRoles = array_map('strval', (array) Session::get(self::SESSION_BACKEND_ROLES, []));
 
     // ANY-match strategy: user must have at least one of the required roles
     $hasAny = count(array_intersect($required, $userRoles)) > 0;

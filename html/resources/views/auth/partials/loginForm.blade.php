@@ -43,7 +43,7 @@
              id="chkRememberMe"
              checked>
       <label class="form-check-label text-dark"
-             for="chkRememberMe">Remember me for 1 day</label>
+             for="chkRememberMe">Remember me</label>
     </div>
     <a class="text-primary fw-bold"
        href="{{ route('admin.forgot') }}">Forgot Password?</a>

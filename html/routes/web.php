@@ -39,14 +39,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     ->name('forgot');
   // Submitting login via POST to avoid CSRF via link spoofing
   Route::post('/login', [AuthController::class, 'submitLogin'])
+    ->middleware('throttle:6,1')
     ->name('login.submit');// ← name = admin.login.submit
+  // Logout (POST to prevent CSRF via link spoofing)
+  Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
 
   // Protected area (requires JWT auth).
   Route::middleware('ensure.jwt')->group(function () {
-    // Logout (POST to prevent CSRF via link spoofing)
-    Route::post('/logout', [AuthController::class, 'logout'])
-      ->name('logout');
-
     // Dashboard (Admin only)
     Route::get('/', [DashboardController::class, 'index'])
       ->middleware('ensure.role:admin|editor') // Example roles, adjust as needed
@@ -90,6 +90,6 @@ Route::middleware('resolve.site')->group(function () {
   // This must be placed LAST within this group
   // and use a regex to avoid intercepting reserved routes.
   Route::get('/{slug}', [PageController::class, 'show'])
-    ->where('slug', '^(?!storage|templates|vendor|api|admin|login|logout|register).*$')
+    ->where('slug', '^(?!favicon\.ico$)(?!robots\.txt$)(?!site\.webmanifest$)(?!apple-touch-icon.*$)(?!storage)(?!templates)(?!vendor)(?!api)(?!admin)(?!login)(?!logout)(?!register).*$')
     ->name('page.show');
 });
