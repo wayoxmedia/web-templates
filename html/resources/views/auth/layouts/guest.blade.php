@@ -12,9 +12,9 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   {{-- CSS --}}
-  <link rel="shortcut icon" type="image/png" href="{{ asset('templates/default/img/favicon.svg') }}" />
-  <link rel="stylesheet" href="{{ asset('admin/css/styles.min.css') }}" />
-  <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}" />
+  <link rel="shortcut icon" type="image/png" href="{{ asset('templates/default/img/favicon.svg') }}"/>
+  <link rel="stylesheet" href="{{ asset('admin/css/styles.min.css') }}"/>
+  <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}"/>
 
   {{-- JS --}}
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"

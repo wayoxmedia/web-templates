@@ -12,6 +12,7 @@
     .tooltip[data-popper-placement^="top"] {
       margin-bottom: 20px !important;
     }
+
     .min-h-50 {
       min-height: 50px !important;
     }

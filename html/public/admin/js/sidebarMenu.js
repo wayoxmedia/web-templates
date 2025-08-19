@@ -29,10 +29,11 @@ $(function () {
 
     return null; // Return null if no matching element is found
   }
+
   let elements = findMatchingElement();
 
   // Do something with the matching element
-  if(elements){
+  if (elements) {
     elements.classList.add("active");
   }
 

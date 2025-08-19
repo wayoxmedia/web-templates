@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  * 1. Normalizes the host by stripping "www." if present.
  * 2. Calls the Backend API to resolve the site using the normalized domain.
  * 3. If the site is found, it retrieves tenant, template, site, and settings from Session.
- * 4.  If the site cannot be resolved, it aborts with a 404 error.
+ * 4. If the site cannot be resolved, it aborts with a 404 error.
  * 5. Injects the resolved tenant, template, site, and settings into the service container.
  * 6. Registers view namespaces for the active theme and a base fallback theme.
  * 7. Proceeds with the next middleware or request handler.
@@ -49,8 +49,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * [User receive HTML with assigned template]
  */
-readonly class ResolveSiteMiddleware
-{
+readonly class ResolveSiteMiddleware {
   /**
    * Create a new middleware instance.
    *
@@ -66,9 +65,8 @@ readonly class ResolveSiteMiddleware
    * - Inject tenant, template, site, settings into container
    * - Register view namespaces for the active theme and base fallback
    */
-  public function handle(Request $request, Closure $next): Response
-  {
-    $host   = strtolower($request->getHost());
+  public function handle(Request $request, Closure $next): Response {
+    $host = strtolower($request->getHost());
     $domain = preg_replace('/^www\./i', '', $host) ?: $host;
 
     $ctx = SiteContext::remember($this->api, $domain, 600);
@@ -77,12 +75,12 @@ readonly class ResolveSiteMiddleware
 
     if (!$resolved ||
       !is_array($resolved) ||
-      ! isset($resolved['tenant'], $resolved['template'], $resolved['site'])
+      !isset($resolved['tenant'], $resolved['template'], $resolved['site'])
     ) {
       abort(404, 'Site not found for this domain.');
     }
 
-    $tenant   = $resolved['tenant'];
+    $tenant = $resolved['tenant'];
     $template = $resolved['template'];
     $settings = $resolved['settings'] ?? [];
 
@@ -92,23 +90,23 @@ readonly class ResolveSiteMiddleware
       : (is_string($template) ? $template : 'default');
 
     // Expose data in the service container for later use
-    app()->instance('tenant', (object) $tenant);
-    app()->instance('template', (object) (is_array($template) ? $template : ['slug' => $templateSlug]));
-    app()->instance('site', (object) $resolved['site']);
+    app()->instance('tenant', (object)$tenant);
+    app()->instance('template', (object)(is_array($template) ? $template : ['slug' => $templateSlug]));
+    app()->instance('site', (object)$resolved['site']);
     app()->instance('theme_settings', $settings);
 
     // Register theme view namespaces
     $themePath = resource_path("views/templates/{$templateSlug}");
-    $basePath  = resource_path('views/templates/default');
+    $basePath = resource_path('views/templates/default');
 
     View::replaceNamespace('theme', [$themePath, $basePath]);
     View::replaceNamespace('themeBase', [$basePath]);
 
     view()->share([
-      'tenant'       => $tenant,
-      'site'         => $resolved['site'],
+      'tenant' => $tenant,
+      'site' => $resolved['site'],
       'templateSlug' => $templateSlug,
-      'themeSettings'=> $settings,
+      'themeSettings' => $settings,
     ]);
 
     return $next($request);

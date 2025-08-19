@@ -41,9 +41,9 @@ $(document).ready(function () {
    *************/
 
   // Simple password visibility toggle
-  const toggleBtn  = document.getElementById('chkTogglePassword');
+  const toggleBtn = document.getElementById('chkTogglePassword');
   const toggleIcon = document.getElementById('toggleIcon');
-  const pwdInput   = document.getElementById('password');
+  const pwdInput = document.getElementById('password');
 
   if (toggleBtn && toggleIcon && pwdInput) {
     toggleBtn.addEventListener('click', function () {
@@ -54,7 +54,7 @@ $(document).ready(function () {
   }
   // Enable button when inputs change.
   $inputs.on('input', function () {
-    if ($email.val().length >=6 && $password.val().length >= 8) {
+    if ($email.val().length >= 6 && $password.val().length >= 8) {
       $btnSubmit.prop("disabled", false);
       disableTooltip();
     } else {

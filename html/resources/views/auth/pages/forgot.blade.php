@@ -11,7 +11,7 @@
 @endpush
 
 @section('content')
-{{--  @include('auth.partials.forgotForm')--}}
+  {{--  @include('auth.partials.forgotForm')--}}
 @endsection
 
 @push('scripts')

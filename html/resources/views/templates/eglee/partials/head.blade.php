@@ -7,9 +7,9 @@
 
 <!-- google fonts -->
 <link
-    href='https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900%7CMerriweather:400,400italic,300,300italic,700,700italic'
-    rel='stylesheet'
-    type='text/css'>
+  href='https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900%7CMerriweather:400,400italic,300,300italic,700,700italic'
+  rel='stylesheet'
+  type='text/css'>
 <!-- Font icons -->
 <link rel="stylesheet"
       href="{{ asset('templates/default/css/vendor/elegant-font-icon.css') }}">

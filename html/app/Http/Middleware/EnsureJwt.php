@@ -12,13 +12,12 @@ use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-readonly class EnsureJwt
-{
+readonly class EnsureJwt {
   // Session keys (keep in sync with FE AuthController)
-  private const SESSION_BACKEND_JWT_TOKEN  = 'backend.jwt';
+  private const SESSION_BACKEND_JWT_TOKEN = 'backend.jwt';
   private const SESSION_BACKEND_EXPIRES_AT = 'backend.expires_at';
-  private const SESSION_BACKEND_USER       = 'backend.user';
-  private const SESSION_BACKEND_ROLES      = 'backend.roles';
+  private const SESSION_BACKEND_USER = 'backend.user';
+  private const SESSION_BACKEND_ROLES = 'backend.roles';
   private const SESSION_BACKEND_REFRESH_AT = 'backend.refresh_after';
 
   public function __construct(private AuthApiClient $auth) {}
@@ -26,8 +25,7 @@ readonly class EnsureJwt
   /**
    * Handle an incoming request.
    */
-  public function handle(Request $request, Closure $next): Response|RedirectResponse
-  {
+  public function handle(Request $request, Closure $next): Response|RedirectResponse {
     // Skip for login routes to avoid loops
     if ($request->routeIs(['admin.login', 'admin.login.submit'])) {
       return $next($request);
@@ -49,11 +47,11 @@ readonly class EnsureJwt
     }
 
     // Try refresh if it's time (~15 min) OR token is close to expiry (<=2 min)
-    $refreshAfter = (int) Session::get(self::SESSION_BACKEND_REFRESH_AT, 0);
+    $refreshAfter = (int)Session::get(self::SESSION_BACKEND_REFRESH_AT, 0);
     $closeToExpiry = $now->addMinutes(2)->timestamp >= $expiresAt;
 
     if (($refreshAfter > 0 && $now->timestamp >= $refreshAfter) || $closeToExpiry) {
-      if (! $this->attemptRefresh($token)) {
+      if (!$this->attemptRefresh($token)) {
         $this->clearAuthSession();
         return $this->toLogin($request);
       }
@@ -65,16 +63,15 @@ readonly class EnsureJwt
   /**
    * Attempt to refresh token; update session on success.
    */
-  private function attemptRefresh(string $currentToken): bool
-  {
+  private function attemptRefresh(string $currentToken): bool {
     try {
 
       $resp = $this->auth->refresh($currentToken);
 
-      $newToken  = $resp['token'] ?? $resp['access_token'] ?? null;
-      $expiresIn = (int) ($resp['expires_in'] ?? 0);
+      $newToken = $resp['token'] ?? $resp['access_token'] ?? null;
+      $expiresIn = (int)($resp['expires_in'] ?? 0);
 
-      if (! is_string($newToken) || $newToken === '' || $expiresIn <= 0) {
+      if (!is_string($newToken) || $newToken === '' || $expiresIn <= 0) {
         return false;
       }
 
@@ -104,8 +101,7 @@ readonly class EnsureJwt
   /**
    * Clear auth data from session.
    */
-  private function clearAuthSession(): void
-  {
+  private function clearAuthSession(): void {
     $store = session();
     $store->forget([
       self::SESSION_BACKEND_JWT_TOKEN,
@@ -120,8 +116,7 @@ readonly class EnsureJwt
   /**
    * Redirect to log in with intended URL.
    */
-  private function toLogin(Request $request): RedirectResponse
-  {
+  private function toLogin(Request $request): RedirectResponse {
     // Store intended URL in session so redirect()->intended() works after login
     session()->put('url.intended', $request->fullUrl());
 

@@ -8,8 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\View;
 use App\Services\BackendApi;
 
-class PageController extends Controller
-{
+class PageController extends Controller {
   public function __construct(private readonly BackendApi $api) {}
 
   /**
@@ -22,8 +21,8 @@ class PageController extends Controller
     $themeSettings = app('theme_settings'); // array
 
     // Determine what "home" means (fallback to "home")
-    $homeFallback  = is_array($themeSettings) && isset($themeSettings['home_slug'])
-      ? (string) $themeSettings['home_slug']
+    $homeFallback = is_array($themeSettings) && isset($themeSettings['home_slug'])
+      ? (string)$themeSettings['home_slug']
       : 'home';
 
     // Normalize slug: null / "" / "/" -> $homeFallback; trim leading/trailing slashes
@@ -37,24 +36,24 @@ class PageController extends Controller
     // Fetch page from Backend API
     $response = $this->api->getPageBySlug($tenant->id, $slug);
 
-    if (!is_array($response) || empty($response['ok'])) {
+    if (empty($response['ok'])) {
       abort(404, 'Page not found');
     }
 
     $page = $response['data'] ?? null;
-    if (! $page) {
+    if (!$page) {
       abort(404, 'Page not found.');
     }
 
     // Common data for the view
     $data = [
-      'page'          => $page,
-      'content'       => $page['content'] ?? [],
-      'settings'      => $themeSettings,
-      'tenant'        => $tenant,
-      'template'      => $template,
-      'slug'          => $slug,
-      'homeFallback'  => $homeFallback,
+      'page'         => $page,
+      'content'      => $page['content'] ?? [],
+      'settings'     => $themeSettings,
+      'tenant'       => $tenant,
+      'template'     => $template,
+      'slug'         => $slug,
+      'homeFallback' => $homeFallback,
     ];
 
     // Candidate view names inside the theme
@@ -84,8 +83,7 @@ class PageController extends Controller
    * "about" => ["pages.about", "pages.generic"]
    * "products/sauce-xyz" => ["pages.products.sauce-xyz", "pages.products.index", "pages.generic"]
    */
-  protected function buildCandidates(string $slug, string $homeFallback): array
-  {
+  protected function buildCandidates(string $slug, string $homeFallback): array {
     // Normalized earlier, pero igual aseguramos:
     $slug = trim($slug, "/ \t\n\r\0\x0B");
     $isHome = ($slug === $homeFallback);
@@ -95,7 +93,7 @@ class PageController extends Controller
 
     // Primer prefijo (para fallback pages.<prefix>.index)
     $segments = explode('.', $dotSlug);
-    $prefix   = 'pages.' . ($segments[0] ?? 'generic');
+    $prefix = 'pages.' . ($segments[0] ?? 'generic');
 
     // Candidatos ordenados (theme:: primero, luego themeBase:: en el controller)
     $candidates = [
@@ -125,8 +123,7 @@ class PageController extends Controller
    * @param string $homeFallback
    * @return string
    */
-  private function normalizeSlug(?string $slug, string $homeFallback = 'home'): string
-  {
+  private function normalizeSlug(?string $slug, string $homeFallback = 'home'): string {
     if ($slug === null) {
       return $homeFallback;
     }

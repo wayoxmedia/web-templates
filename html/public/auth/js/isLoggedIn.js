@@ -1,6 +1,6 @@
-import { msaConfig } from '../../global/js/config.js.php';
-import { checkIfLoggedIn, clearToken, logout, refreshIfNearExpiry } from '../../admin/js/utils/loginUtilities.js';
-import { hideSpinner, showSpinner } from "../../global/js/global.js";
+import {msaConfig} from '../../global/js/config.js.php';
+import {checkIfLoggedIn, clearToken, logout, refreshIfNearExpiry} from '../../admin/js/utils/loginUtilities.js';
+import {hideSpinner, showSpinner} from "../../global/js/global.js";
 
 /**
  * On Document Ready,
@@ -14,8 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   if (!stillValid) {
     logout();
     return;
-  }
-  else {
+  } else {
     await refreshIfNearExpiry(token);
     if (window.fromIndex) {
       // if coming from admin/index.php, redirect to dashboard page.
@@ -39,15 +38,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         if (!response.ok) {
           console.log('Error en logout:', response.status);
-        }
-        else {
+        } else {
           console.log('Logout exitoso');
         }
-      }
-      catch (error) {
+      } catch (error) {
         console.error('Fallo de red en logout:', error);
-      }
-      finally {
+      } finally {
         clearToken();
         hideSpinner();
         logout();

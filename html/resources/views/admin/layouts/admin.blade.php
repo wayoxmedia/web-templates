@@ -18,10 +18,21 @@
 
   <style>
     /* Minimal admin layout helpers */
-    body { background-color: #f8f9fa; }
-    .navbar-brand { font-weight: 700; }
-    .container-narrow { max-width: 960px; }
-    .mt-navbar { margin-top: 1rem; }
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+    }
+
+    .container-narrow {
+      max-width: 960px;
+    }
+
+    .mt-navbar {
+      margin-top: 1rem;
+    }
   </style>
 
   @stack('head')
