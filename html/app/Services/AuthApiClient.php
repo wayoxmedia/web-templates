@@ -40,7 +40,7 @@ readonly class AuthApiClient {
    * Refresh the JWT.
    *
    * @return array The JSON response (token, expires_in)
-   * @throws ConnectionException|RequestException
+   * @throws RequestException|ConnectionException
    */
   public function refresh(string $token): array {
     $response = $this->api->post('/auth/refresh', [], true, $token);
