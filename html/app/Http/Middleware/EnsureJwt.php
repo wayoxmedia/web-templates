@@ -10,13 +10,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
-class EnsureJwt
+readonly class EnsureJwt
 {
   // Session keys (keep in sync with FE AuthController)
-  private const S_JWT        = 'auth.jwt';
-  private const S_EXPIRES_AT = 'auth.expires_at';   // unix timestamp
-  private const S_REFRESH_AT = 'auth.refresh_after';// unix timestamp
+  private const SESSION_BACKEND_JWT_TOKEN  = 'backend.jwt';
+  private const SESSION_BACKEND_EXPIRES_AT = 'backend.expires_at';
+  private const SESSION_BACKEND_USER       = 'backend.user';
+  private const SESSION_BACKEND_ROLES      = 'backend.roles';
+  private const SESSION_BACKEND_REFRESH_AT = 'backend.refresh_after';
+
+  public function __construct(private AuthApiClient $auth) {}
 
   /**
    * Handle an incoming request.
@@ -29,8 +34,8 @@ class EnsureJwt
     }
 
     $now       = CarbonImmutable::now();
-    $token     = (string) Session::get(self::S_JWT, '');
-    $expiresAt = (int) Session::get(self::S_EXPIRES_AT, 0);
+    $token     = (string) Session::get(self::SESSION_BACKEND_JWT_TOKEN, '');
+    $expiresAt = (int) Session::get(self::SESSION_BACKEND_EXPIRES_AT, 0);
 
     if ($token === '' || $expiresAt <= 0) {
       return $this->toLogin($request);
@@ -38,13 +43,13 @@ class EnsureJwt
 
     // Small clock skew tolerance (5s)
     if ($now->timestamp >= ($expiresAt - 5)) {
-      // Token expired → clear session and redirect to login
+      // Token expired → clear session and redirect to login page
       $this->clearAuthSession();
       return $this->toLogin($request);
     }
 
     // Try refresh if it's time (~15 min) OR token is close to expiry (<=2 min)
-    $refreshAfter = (int) Session::get(self::S_REFRESH_AT, 0);
+    $refreshAfter = (int) Session::get(self::SESSION_BACKEND_REFRESH_AT, 0);
     $closeToExpiry = $now->addMinutes(2)->timestamp >= $expiresAt;
 
     if (($refreshAfter > 0 && $now->timestamp >= $refreshAfter) || $closeToExpiry) {
@@ -63,12 +68,10 @@ class EnsureJwt
   private function attemptRefresh(string $currentToken): bool
   {
     try {
-      /** @var AuthApiClient $client */
-      $client = app(AuthApiClient::class);
 
-      $resp = $client->refresh($currentToken);
+      $resp = $this->auth->refresh($currentToken);
 
-      $newToken  = $resp['token']      ?? $resp['access_token'] ?? null;
+      $newToken  = $resp['token'] ?? $resp['access_token'] ?? null;
       $expiresIn = (int) ($resp['expires_in'] ?? 0);
 
       if (! is_string($newToken) || $newToken === '' || $expiresIn <= 0) {
@@ -79,19 +82,19 @@ class EnsureJwt
       $expiresAt = $now->addSeconds($expiresIn)->timestamp;
       $refreshAt = $now->addMinutes(15)->timestamp;
 
-      Session::put(self::S_JWT,        $newToken);
-      Session::put(self::S_EXPIRES_AT, $expiresAt);
-      Session::put(self::S_REFRESH_AT, $refreshAt);
+      Session::put(self::SESSION_BACKEND_JWT_TOKEN,  $newToken);
+      Session::put(self::SESSION_BACKEND_EXPIRES_AT, $expiresAt);
+      Session::put(self::SESSION_BACKEND_REFRESH_AT, $refreshAt);
       Session::save();
 
       return true;
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
       try {
         Log::warning('JWT auto-refresh failed', [
           'error' => $e->getMessage(),
           'class' => get_class($e),
         ]);
-      } catch (\Throwable $ignored) {
+      } catch (Throwable $ignored) {
         // ignore logging failures
       }
       return false;
@@ -103,13 +106,15 @@ class EnsureJwt
    */
   private function clearAuthSession(): void
   {
-    Session::forget([
-      self::S_JWT,
-      self::S_EXPIRES_AT,
-      self::S_REFRESH_AT,
-      'auth.user', 'auth.roles']
-    );
-    Session::save();
+    $store = session();
+    $store->forget([
+      self::SESSION_BACKEND_JWT_TOKEN,
+      self::SESSION_BACKEND_EXPIRES_AT,
+      self::SESSION_BACKEND_REFRESH_AT,
+      self::SESSION_BACKEND_USER,
+      self::SESSION_BACKEND_ROLES,
+    ]);
+    $store->save();
   }
 
   /**

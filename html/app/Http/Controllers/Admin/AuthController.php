@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\BackendServiceException;
 use App\Http\Controllers\Controller;
 use App\Services\AuthApiClient;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Client\RequestException;
@@ -17,23 +19,20 @@ use Throwable;
 
 class AuthController extends Controller
 {
-  private const SESSION_JWT        = 'auth.jwt';
-  private const SESSION_EXPIRES_AT = 'auth.expires_at'; // unix timestamp
-  private const SESSION_USER       = 'auth.user';
-  private const SESSION_ROLES      = 'auth.roles';
-  private const SESSION_REFRESH_AT = 'auth.refresh_after'; // unix timestamp (for step 7: middleware refresh)
+  private const SESSION_BACKEND_JWT_TOKEN  = 'backend.jwt';
+  private const SESSION_BACKEND_EXPIRES_AT = 'backend.expires_at';
+  private const SESSION_BACKEND_USER       = 'backend.user';
+  private const SESSION_BACKEND_ROLES      = 'backend.roles';
+  private const SESSION_BACKEND_REFRESH_AT = 'backend.refresh_after';
 
-  public function __construct(private readonly AuthApiClient $client)
-  {
-  }
+  public function __construct(private readonly AuthApiClient $client) {}
 
   /**
    * Show the login form.
    *
-   * @param Request $request
    * @return View|RedirectResponse
    */
-  public function showLogin(Request $request): View|RedirectResponse
+  public function showLogin(): View|RedirectResponse
   {
     if ($this->isAuthenticated()) {
       return redirect()->route('admin.dashboard');
@@ -47,7 +46,8 @@ class AuthController extends Controller
    *
    * @return View
    */
-  public function showForgot(): View {
+  public function showForgot(): View
+  {
     return view('auth.pages.forgot');
   }
 
@@ -56,12 +56,12 @@ class AuthController extends Controller
    *
    * @param Request $request
    * @return RedirectResponse
-   * @throws ValidationException|ConnectionException
+   * @throws ValidationException
    */
   public function submitLogin(Request $request): RedirectResponse
   {
     $validated = $request->validate([
-      'email'    => ['required', 'string', 'email', 'min:6'],
+      'email'    => ['required', 'string', 'email', 'min:6', 'max:100'],
       'password' => ['required', 'string', 'min:8'],
     ]);
 
@@ -71,35 +71,42 @@ class AuthController extends Controller
       // Backend returned non-2xx or is unreachable
       // Process error and show generic message to avoid leaking information
       $status = $e->response?->status();
-      logger()->warning(
-        'Login failed',
+      logger()->info(
+        'Backend Login Failed',
         [
           'email'  => $validated['email'],
           'code'   => $e->getCode(),
           'status' => $status,
+          'message' => $e->getMessage() ?? 'No message provided',
+          'uri'     => method_exists($e->response, 'effectiveUri')
+            ? (string) $e->response->effectiveUri()
+            : 'n/a',
           //'trace'    => $e->getTraceAsString(),
           //'response' => $e->response?->body(),
         ]
       );
 
-      // Prefer a friendly message; fallback if backend didn’t send 'error'.
-      $backendMsg = data_get($e->response?->json(), 'error');
+      $this->beautifyException($e, $status);
+    } catch (Throwable $e) {
+      // Catch-all for unexpected errors
 
-      // Map common statuses to nicer messages.
-      $friendly = match ($status) {
-        401 => __('Authentication failed. Please check your credentials.'),
-        429 => __('Too many attempts. Please try again in a moment.'),
-        503, 502, 504 => __('Service unavailable. Please try again shortly.'),
-        default => __('Unexpected error. Please try again.'),
-      };
+      logger()->error('Unexpected Login error', [
+        'email'  => $validated['email'],
+        'code'   => $e->getCode(),
+        'message' => $e->getMessage() ?? 'No message provided',
+        //'trace'    => $e->getTraceAsString(),
+      ]);
 
-      throw ValidationException::withMessages([
-        // "credentials" is a pseudo-field we will render in #login-error
-        'credentials' => $backendMsg ?: $friendly,
-      ])->redirectTo(url()->previous()); // keeps standard back() behavior
+      return redirect()
+        ->back()
+        ->withInput($request->only('email'))
+        ->withErrors([
+          'credentials' => __('An unexpected error occurred. Please try again later.'),
+        ]);
     }
 
     $this->storeAuthInSession($resp);
+    $request->session()->regenerate(); // anti-fixation
 
     // Redirect to intended admin area
     return redirect()->intended(route('admin.dashboard'));
@@ -107,10 +114,13 @@ class AuthController extends Controller
 
   /**
    * Logout: invalidate token on backend and clear local session.
+   *
+   * @param Request $request
+   * @return RedirectResponse
    */
   public function logout(Request $request): RedirectResponse
   {
-    $token = Session::get(self::SESSION_JWT);
+    $token = Session::get(self::SESSION_BACKEND_JWT_TOKEN);
 
     if (is_string($token) && $token !== '') {
       try {
@@ -127,12 +137,17 @@ class AuthController extends Controller
     }
 
     $this->clearAuthSession();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
     return redirect()->route('admin.login')->with('status', __('You have been logged out.'));
   }
 
   /**
    * Persist token, user and roles in PHP session.
+   *
+   * @param array $payload The response payload from the backend.
+   * @throws RuntimeException on invalid payload.
    */
   private function storeAuthInSession(array $payload): void
   {
@@ -151,14 +166,12 @@ class AuthController extends Controller
     // For the refresh middleware (step 7), we set a refresh-after mark at ~15 minutes
     $refreshAfter = $now->copy()->addMinutes(15)->timestamp;
 
-    Session::put(self::SESSION_JWT, $token);
-    Session::put(self::SESSION_EXPIRES_AT, $expiresAt);
-    Session::put(self::SESSION_USER, $user);
-    Session::put(self::SESSION_ROLES, array_values((array) $roles));
-    Session::put(self::SESSION_REFRESH_AT, $refreshAfter);
-
-    // Regenerate session ID to mitigate fixation
-    Session::migrate(true);
+    Session::put(self::SESSION_BACKEND_JWT_TOKEN, $token);
+    Session::put(self::SESSION_BACKEND_USER, $user);
+    Session::put(self::SESSION_BACKEND_ROLES, array_values((array) $roles));
+    Session::put(self::SESSION_BACKEND_REFRESH_AT, $refreshAfter);
+    Session::put(self::SESSION_BACKEND_EXPIRES_AT, $expiresAt);
+    Session::save();
   }
 
   /**
@@ -166,12 +179,13 @@ class AuthController extends Controller
    */
   private function clearAuthSession(): void
   {
-    Session::forget([
-      self::SESSION_JWT,
-      self::SESSION_EXPIRES_AT,
-      self::SESSION_USER,
-      self::SESSION_ROLES,
-      self::SESSION_REFRESH_AT,
+    /** @var Store $store */
+    $store = app('session');
+    $store->forget([
+      self::SESSION_BACKEND_JWT_TOKEN,
+      self::SESSION_BACKEND_USER,
+      self::SESSION_BACKEND_ROLES,
+      self::SESSION_BACKEND_REFRESH_AT,
     ]);
     Session::save();
   }
@@ -181,8 +195,8 @@ class AuthController extends Controller
    */
   private function isAuthenticated(): bool
   {
-    $token     = Session::get(self::SESSION_JWT);
-    $expiresAt = (int) Session::get(self::SESSION_EXPIRES_AT, 0);
+    $token     = Session::get(self::SESSION_BACKEND_JWT_TOKEN);
+    $expiresAt = (int) Session::get(self::SESSION_BACKEND_EXPIRES_AT, 0);
 
     if (!is_string($token) || $token === '' || $expiresAt <= 0) {
       return false;
@@ -190,5 +204,33 @@ class AuthController extends Controller
 
     // Small clock skew tolerance: 5 seconds
     return Carbon::now()->timestamp < ($expiresAt - 5);
+  }
+
+  /**
+   * @throws ValidationException
+   */
+  private function beautifyException($e, $status) {
+    // Prefer a friendly message; fallback if backend didn’t send 'error'.
+    if (isset($e->response) && method_exists($e->response, 'json')) {
+      // If the response is JSON, we can extract the error message.
+      // This is common in APIs that return structured error responses.
+      $backendMsg = data_get($e->response?->json(), 'error');
+    } else {
+      // If the response is not JSON or doesn't have a body, we use the exception message.
+      $backendMsg = $e->getMessage();
+    }
+
+    // Map common statuses to nicer messages.
+    $friendly = match ($status) {
+      401 => __('Authentication failed. Please check your credentials.'),
+      429 => __('Too many attempts. Please try again in a moment.'),
+      503, 502, 504 => __('Service unavailable. Please try again shortly.'),
+      default => $backendMsg ?? __('Unexpected error. Please try again.'),
+    };
+
+    throw ValidationException::withMessages([
+      // "credentials" is a pseudo-field we will render in #login-error
+      'credentials' => $friendly,
+    ])->redirectTo(url()->previous()); // keeps standard back() behavior
   }
 }

@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View as ViewAlias;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use App\Services\BackendApi;
 
 class PageController extends Controller
 {
-  public function __construct(private BackendApi $api) {}
+  public function __construct(private readonly BackendApi $api) {}
 
   /**
    * Resolve page by slug via Backend API and render using the active theme.
