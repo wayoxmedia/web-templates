@@ -1,4 +1,3 @@
-{{--@php(xdebug_break())--}}
 <form id="loginForm"
       action="{{ route('admin.login.submit') }}"
       method="POST"

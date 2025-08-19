@@ -21,8 +21,7 @@ use Carbon\Carbon;
  * @return string          Sanitized HTML.
  */
 if (!function_exists('safe_html')) {
-  function safe_html(string $html, array $allowed = ['br', 'strong', 'em', 'p', 'ul', 'li', 'a']): string
-  {
+  function safe_html(string $html, array $allowed = ['br', 'strong', 'em', 'p', 'ul', 'li', 'a']): string {
     $allowedTags = '';
     foreach ($allowed as $tag) {
       $allowedTags .= "<{$tag}>";
@@ -67,8 +66,7 @@ if (!function_exists('format_currency')) {
  * Format a date to a human-readable format.
  */
 if (!function_exists('format_date')) {
-  function format_date($date, string $format = 'd/m/Y H:i'): string
-  {
+  function format_date($date, string $format = 'd/m/Y H:i'): string {
     return Carbon::parse($date)->format($format);
   }
 }
@@ -79,8 +77,7 @@ if (!function_exists('format_date')) {
  * @return string
  */
 if (!function_exists('app_version')) {
-  function app_version(): string
-  {
+  function app_version(): string {
     return config('app.version', '1.0.0');
   }
 }
@@ -93,8 +90,7 @@ if (!function_exists('app_version')) {
  * @return mixed
  */
 if (!function_exists('setting')) {
-  function setting(string $key, mixed $default = null): mixed
-  {
+  function setting(string $key, mixed $default = null): mixed {
     // If you have a Settings model, try DB first
     if (class_exists(Setting::class)) {
       $value = Setting::query()->where('key', $key)->value('value');
@@ -117,8 +113,7 @@ if (!function_exists('setting')) {
  * @return void
  */
 if (!function_exists('debug_log')) {
-  function debug_log(mixed $message, array $context = []): void
-  {
+  function debug_log(mixed $message, array $context = []): void {
     // Normalize non-string messages
     if (!is_string($message)) {
       $message = print_r($message, true);
@@ -136,8 +131,7 @@ if (!function_exists('debug_log')) {
  * @return void
  */
 if (!function_exists('debug_dump')) {
-  function debug_dump(...$vars): void
-  {
+  function debug_dump(...$vars): void {
     echo "<div style='margin:10px 0;font-family:Menlo,Consolas,monospace;'>";
     foreach ($vars as $var) {
       $type = gettype($var);

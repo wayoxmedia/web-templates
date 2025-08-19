@@ -33,8 +33,9 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     "use strict";
+
     /**
      * Definimos el número que la computadora va a crear
      * El número lo vamos a guardar en una variable
@@ -128,7 +129,7 @@
      * Reseteamos el juego
      * Cuando el usuario haga clic en el botón de reset
      */
-    btnReset.on('click', function() {
+    btnReset.on('click', function () {
       // Reiniciamos el contador
       counter = 0;
       // Generamos un nuevo número aleatorio
@@ -138,9 +139,6 @@
       results.text('¡Juego reiniciado!');
       iptGuess.val(''); // Limpia el campo de entrada
     })
-
-
-
 
     /**
      * Tipos de Datos en JavaScript:
@@ -195,9 +193,6 @@
         console.log('miBooleanoFalse es falso');
       }
     }
-
-
-
   });
 </script>
 </body>

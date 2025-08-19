@@ -2,7 +2,11 @@
 <section id="navbar" class="navbar navbar-hugeinc">
   <header>
     <a href="javascript:void(0);" class="navbar-close"><span class="icon_close"></span></a>
-    <div class="nav-logo"><h1 class="logo"><img src="{{ asset('templates/default/img/logo.png') }}" alt="logo"/></h1></div>
+    <div class="nav-logo">
+      <h1 class="logo">
+        <img src="{{ asset('templates/default/img/logo.png') }}" alt="logo"/>
+      </h1>
+    </div>
   </header>
   <nav>
     <ul>

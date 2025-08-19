@@ -8,7 +8,8 @@
   <div class="row bgTan">
     <div class="col-xs-12">
       <div class="">
-        <img src="{{ asset('templates/default/img/eglita_ok.png') }}" alt="subscribe" class="img-responsive image-centered"/>
+        <img src="{{ asset('templates/default/img/eglita_ok.png') }}" alt="subscribe"
+             class="img-responsive image-centered"/>
       </div>
     </div>
   </div>

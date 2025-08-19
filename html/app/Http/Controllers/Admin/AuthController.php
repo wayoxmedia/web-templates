@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exceptions\BackendServiceException;
 use App\Http\Controllers\Controller;
 use App\Services\AuthApiClient;
 use Illuminate\Contracts\View\View;
@@ -10,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Client\RequestException;
@@ -214,7 +212,7 @@ class AuthController extends Controller
     if (isset($e->response) && method_exists($e->response, 'json')) {
       // If the response is JSON, we can extract the error message.
       // This is common in APIs that return structured error responses.
-      $backendMsg = data_get($e->response?->json(), 'error');
+      $backendMsg = data_get($e->response->json(), 'error');
     } else {
       // If the response is not JSON or doesn't have a body, we use the exception message.
       $backendMsg = $e->getMessage();

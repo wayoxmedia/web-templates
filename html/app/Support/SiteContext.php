@@ -6,15 +6,13 @@ use App\Services\BackendApi;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 
-class SiteContext
-{
+class SiteContext {
   private const KEY_CTX         = 'site.ctx';           // payload completo (array)
   private const KEY_DOMAIN      = 'site.domain';        // dominio al que pertenece
   private const KEY_TEMPLATE    = 'site.template.slug'; // acceso rápido
   private const KEY_CACHE_UNTIL = 'site.cache_until';   // timestamp (int)
 
-  public static function templateSlug(): ?string
-  {
+  public static function templateSlug(): ?string {
     $slug = Session::get(self::KEY_TEMPLATE);
     return is_string($slug) && $slug !== '' ? $slug : null;
   }
@@ -22,10 +20,9 @@ class SiteContext
   /**
    * Returns the current site context from session.
    */
-  public static function fromSession(string $domain): ?array
-  {
-    $savedDomain = (string) Session::get(self::KEY_DOMAIN, '');
-    $until       = (int) Session::get(self::KEY_CACHE_UNTIL, 0);
+  public static function fromSession(string $domain): ?array {
+    $savedDomain = (string)Session::get(self::KEY_DOMAIN, '');
+    $until = (int)Session::get(self::KEY_CACHE_UNTIL, 0);
 
     if ($savedDomain !== '' && 0 !== strcasecmp($savedDomain, $domain)) {
       return null; // contexto es de otro dominio
@@ -42,8 +39,7 @@ class SiteContext
    * If it exists in session, returns it. If not, calls the backend resolver,
    * saves the result in session, and returns it.
    */
-  public static function remember(BackendApi $api, string $domain, int $sessionTtl = 600): array
-  {
+  public static function remember(BackendApi $api, string $domain, int $sessionTtl = 600): array {
     $ctx = self::fromSession($domain);
     if ($ctx && is_array($ctx)) {
       return $ctx;
@@ -61,8 +57,7 @@ class SiteContext
    * For convenience, we will store the site context in session.
    * This allows us to access the current site and tenant easily.
    */
-  public static function saveFromResolve(array $payload, string $domain, int $ttlSeconds = 600): void
-  {
+  public static function saveFromResolve(array $payload, string $domain, int $ttlSeconds = 600): void {
     $slug = Arr::get($payload, 'template.slug');
 
     Session::put(self::KEY_CTX, $payload);
@@ -78,8 +73,7 @@ class SiteContext
    * Cleans the context from session.
    * This is useful when switching sites or domains, or when the context is no longer valid
    */
-  public static function clear(): void
-  {
+  public static function clear(): void {
     $store = session();
     $store->forget([
       self::KEY_CTX,

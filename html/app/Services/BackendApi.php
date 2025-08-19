@@ -12,8 +12,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\RequestException;
 use RuntimeException;
 
-class BackendApi
-{
+class BackendApi {
   protected string $root;
   protected int $timeout;
   protected int $connectTimeout;
@@ -29,26 +28,25 @@ class BackendApi
    * Initializes the API client with configuration from services.backend.
    * Sets up base URL, headers, timeouts, and other settings.
    */
-  public function __construct()
-  {
-    $cfg = (array) config('services.backend',  []);
+  public function __construct() {
+    $cfg = (array)config('services.backend', []);
 
-    $base   = rtrim($cfg['base_url'] ?? 'http://mystorepanel.test', '/');
+    $base = rtrim($cfg['base_url'] ?? 'http://mystorepanel.test', '/');
     $prefix = '/' . ltrim($cfg['api_prefix'] ?? '/api', '/');
     $this->root = $base . $prefix; // ej: http://mystorepanel.test/api
 
-    $this->timeout        = $cfg['timeout']                ?? 10;
-    $this->connectTimeout = (int) ($cfg['connect_timeout'] ?? 5);
-    $this->retry          = (int) ($cfg['retry']           ?? 1);
-    $this->retryDelayMs   = (int) ($cfg['retry_delay_ms']  ?? 150);
-    $this->cacheTtl       = $cfg['cache_ttl']              ?? 600; // seconds
+    $this->timeout = $cfg['timeout'] ?? 10;
+    $this->connectTimeout = (int)($cfg['connect_timeout'] ?? 5);
+    $this->retry = (int)($cfg['retry'] ?? 1);
+    $this->retryDelayMs = (int)($cfg['retry_delay_ms'] ?? 150);
+    $this->cacheTtl = $cfg['cache_ttl'] ?? 600; // seconds
 
     // ALWAYS send Service Token
-    $serviceToken = (string) ($cfg['service_token'] ?? 'MISSING TOKEN');
+    $serviceToken = (string)($cfg['service_token'] ?? 'MISSING TOKEN');
     $this->defaultHeaders = array_merge(
-      (array) ($cfg['default_headers'] ?? []),
+      (array)($cfg['default_headers'] ?? []),
       [
-        'Accept'          => 'application/json',
+        'Accept' => 'application/json',
         'X-Service-Token' => $serviceToken,
       ]
     );
@@ -67,9 +65,9 @@ class BackendApi
    * @throws RequestException|ConnectionException
    */
   public function get(
-    string $path,
-    array $query = [],
-    bool $withAuth = false,
+    string  $path,
+    array   $query = [],
+    bool    $withAuth = false,
     ?string $token = null
   ): PromiseInterface|Response {
     $res = $this->http($withAuth, $token)->get($this->u($path), $query);
@@ -90,11 +88,10 @@ class BackendApi
    * @throws RequestException|ConnectionException
    */
   public function post(
-    string $path,
-    array $json = [],
-    bool $withAuth = false,
-    ?string $token = null): PromiseInterface|Response
-  {
+    string  $path,
+    array   $json = [],
+    bool    $withAuth = false,
+    ?string $token = null): PromiseInterface|Response {
     $res = $this->http($withAuth, $token)->asJson()->post($this->u($path), $json);
     $res->throw();
     return $res;
@@ -114,9 +111,9 @@ class BackendApi
    * @throws ConnectionException|RequestException
    */
   public function put(
-    string $path,
-    array $json = [],
-    bool $withAuth = false,
+    string  $path,
+    array   $json = [],
+    bool    $withAuth = false,
     ?string $token = null
   ): PromiseInterface|Response {
     $res = $this->http($withAuth, $token)->asJson()
@@ -139,9 +136,9 @@ class BackendApi
    * @throws RequestException|ConnectionException
    */
   public function delete(
-    string $path,
-    array $query = [],
-    bool $withAuth = false,
+    string  $path,
+    array   $query = [],
+    bool    $withAuth = false,
     ?string $token = null
   ): PromiseInterface|Response {
     $res = $this->http($withAuth, $token)->delete($this->u($path), $query);
@@ -158,8 +155,7 @@ class BackendApi
    * @param string|null $token
    * @return PendingRequest
    */
-  protected function http(bool $withAuth = false, ?string $token = null): PendingRequest
-  {
+  protected function http(bool $withAuth = false, ?string $token = null): PendingRequest {
     $req = Http::baseUrl($this->root)
       ->acceptJson()
       ->withHeaders($this->defaultHeaders)
@@ -181,8 +177,7 @@ class BackendApi
   /**
    * Normalice path
    */
-  protected function u(string $path): string
-  {
+  protected function u(string $path): string {
     $path = '/' . ltrim($path, '/');
     return preg_replace('#//+#', '/', $path) ?: '/';
   }
@@ -200,8 +195,7 @@ class BackendApi
    * @param string $domain The domain to resolve (e.g. "example.com").
    * @return array The resolved site data.
    */
-  public function resolveSiteByDomain(string $domain): array
-  {
+  public function resolveSiteByDomain(string $domain): array {
     $key = "api:resolve-site:{$domain}";
 
     return Cache::remember($key, $this->cacheTtl, function () use ($domain) {
@@ -212,12 +206,12 @@ class BackendApi
           [
             'status' => $res->status(),
             'domain' => $domain,
-            'url'    => $res->handlerStats()['url'] ?? null, // Final URL called.
-            'uri'    => method_exists($res, 'effectiveUri') ? (string) $res->effectiveUri() : 'n/a',
-            'body'   => $res->body(),
+            'url' => $res->handlerStats()['url'] ?? null, // Final URL called.
+            'uri' => method_exists($res, 'effectiveUri') ? (string)$res->effectiveUri() : 'n/a',
+            'body' => $res->body(),
           ]
         );
-        return (array) $res->json();
+        return (array)$res->json();
       } catch (Exception $e) {
         logger()->error(
           'API call (resolveSiteByDomain) failed for domain: ' . $domain,
@@ -243,29 +237,28 @@ class BackendApi
    *   }
    * }
    */
-  public function getPageBySlug(int $tenantId, string $slug): array
-  {
+  public function getPageBySlug(int $tenantId, string $slug): array {
     $norm = trim($slug);
     if ($norm === '' || $norm === '/') {
       $norm = '/';
     } else {
       $norm = preg_replace('#/+#', '/', $norm);
-      if (! str_starts_with($norm, '/')) {
-        $norm = '/'.$norm;
+      if (!str_starts_with($norm, '/')) {
+        $norm = '/' . $norm;
       }
       $norm = rtrim($norm, '/') ?: '/';
     }
 
-    $key  = "api:page:tenant:{$tenantId}:slug:{$norm}";
+    $key = "api:page:tenant:{$tenantId}:slug:{$norm}";
 
     return Cache::remember($key, $this->cacheTtl, function () use ($tenantId, $norm) {
       try {
         $res = $this->get("tenants/{$tenantId}/pages", ['slug' => $norm]);
         logger()->debug('API call (getPageBySlug)', [
           'status' => $res->status(),
-          'url'    => $res->handlerStats()['url'] ?? null, // URL final que se llamó
-          'uri'    => method_exists($res, 'effectiveUri') ? (string) $res->effectiveUri() : 'n/a',
-          'body'   => $res->body(),
+          'url' => $res->handlerStats()['url'] ?? null, // URL final que se llamó
+          'uri' => method_exists($res, 'effectiveUri') ? (string)$res->effectiveUri() : 'n/a',
+          'body' => $res->body(),
         ]);
         return $res->json();
       } catch (Exception $e) {
@@ -291,8 +284,7 @@ class BackendApi
    * @param int $templateId The template ID.
    * @return array The theme settings.
    */
-  public function getThemeSettings(int $tenantId, int $templateId): array
-  {
+  public function getThemeSettings(int $tenantId, int $templateId): array {
     $key = "api:theme-settings:tenant:{$tenantId}:template:{$templateId}";
 
     return Cache::remember($key, $this->cacheTtl, function () use ($tenantId, $templateId) {
@@ -306,7 +298,7 @@ class BackendApi
             'tenantId' => $tenantId,
             'templateId' => $templateId,
             'exception' => $e->getMessage(),
-        ]);
+          ]);
         throw $e;
       }
     });

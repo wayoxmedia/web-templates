@@ -52,8 +52,12 @@
           <div class="card-body">
             <h3 class="h6 text-uppercase text-muted mb-3">Admin tools</h3>
             <ul class="mb-0">
-              <li><a href="#" class="text-decoration-none disabled" aria-disabled="true">Manage users (coming soon)</a></li>
-              <li><a href="#" class="text-decoration-none disabled" aria-disabled="true">Site settings (coming soon)</a></li>
+              <li>
+                <a href="#" class="text-decoration-none disabled" aria-disabled="true">Manage users (coming soon)</a>
+              </li>
+              <li>
+                <a href="#" class="text-decoration-none disabled" aria-disabled="true">Site settings (coming soon)</a>
+              </li>
               <li><a href="#" class="text-decoration-none disabled" aria-disabled="true">Logs (coming soon)</a></li>
             </ul>
           </div>

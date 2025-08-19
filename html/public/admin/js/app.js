@@ -2,7 +2,7 @@ $(function () {
   // Admin Panel settings
 
   let $mainWrapper = $("#main-wrapper");
-  let $sidebarToggler =  $(".sidebarToggler");
+  let $sidebarToggler = $(".sidebarToggler");
   //****************************
   /* This is for the mini-sidebar if width is less then 1170*/
   //****************************

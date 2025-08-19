@@ -5,8 +5,7 @@ namespace App\Services;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
 
-readonly class AuthApiClient
-{
+readonly class AuthApiClient {
 
   public function __construct(private BackendApi $api) {}
 
@@ -16,14 +15,13 @@ readonly class AuthApiClient
    * @return array The JSON response (token, expires_in, user, roles, etc.)
    * @throws RequestException|ConnectionException
    */
-  public function login(string $email, string $password): array
-  {
+  public function login(string $email, string $password): array {
     $response = $this->api->post('/auth/login', [
-      'email'    => $email,
+      'email' => $email,
       'password' => $password,
     ]);
 
-    return (array) $response->json();
+    return (array)$response->json();
   }
 
   /**
@@ -32,11 +30,10 @@ readonly class AuthApiClient
    * @return array The JSON response (user, roles)
    * @throws ConnectionException|RequestException
    */
-  public function me(string $token): array
-  {
+  public function me(string $token): array {
     $response = $this->api->get('/auth/me', [], true, $token);
 
-    return (array) $response->json();
+    return (array)$response->json();
   }
 
   /**
@@ -45,19 +42,17 @@ readonly class AuthApiClient
    * @return array The JSON response (token, expires_in)
    * @throws RequestException|ConnectionException
    */
-  public function refresh(string $token): array
-  {
+  public function refresh(string $token): array {
     $response = $this->api->post('/auth/refresh', [], true, $token);
 
-    return (array) $response->json();
+    return (array)$response->json();
   }
 
   /**
    * Logout and invalidate the current token.
    * @throws RequestException|ConnectionException
    */
-  public function logout(string $token): void
-  {
+  public function logout(string $token): void {
     $this->api->post('/auth/logout', [], true, $token);
   }
 }

@@ -1,4 +1,4 @@
-import { msaConfig } from './config.js.php';
+import {msaConfig} from './config.js.php';
 
 let spinnerCount = 0;
 
@@ -42,9 +42,9 @@ export function reportFilename(type = "report", startDate = null, endDate = null
       : `_to_${endDate}`)
     : "";
 
-  suffix = suffix ? `_${suffix}`: "";
+  suffix = suffix ? `_${suffix}` : "";
 
-  return `${scn}_${type}_${startDateFmt}${endDateFmt}${suffix}`.replace(/ /g,"_");
+  return `${scn}_${type}_${startDateFmt}${endDateFmt}${suffix}`.replace(/ /g, "_");
 }
 
 /**

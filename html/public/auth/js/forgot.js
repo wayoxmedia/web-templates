@@ -1,5 +1,5 @@
-import { msaConfig } from '../../global/js/config.js.php';
-import { hideSpinner, showSpinner } from '../../global/js/global.js';
+import {msaConfig} from '../../global/js/config.js.php';
+import {hideSpinner, showSpinner} from '../../global/js/global.js';
 
 $(document).ready(function () {
   // Handle form submission

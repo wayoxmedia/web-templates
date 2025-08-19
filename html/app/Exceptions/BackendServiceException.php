@@ -16,8 +16,7 @@ use Throwable;
  * This exception is used to handle errors related to backend service availability,
  * connection issues, or HTTP request failures.
  */
-class BackendServiceException extends RuntimeException
-{
+class BackendServiceException extends RuntimeException {
   /**
    * Constructor for BackendServiceException.
    * Initializes the exception with a default message and optional code and previous exception.
@@ -26,8 +25,8 @@ class BackendServiceException extends RuntimeException
    * @param Throwable|null $previous
    */
   public function __construct(
-    string $message = 'Backend service unavailable.',
-    int $code = 0,
+    string     $message = 'Backend service unavailable.',
+    int        $code = 0,
     ?Throwable $previous = null
   ) {
     parent::__construct($message, $code, $previous);
@@ -40,8 +39,7 @@ class BackendServiceException extends RuntimeException
    * @param Throwable|null $previous
    * @return self
    */
-  public static function connection(Throwable $previous = null): self
-  {
+  public static function connection(Throwable $previous = null): self {
     return new self('Backend connection failed.', 0, $previous);
   }
 
@@ -54,8 +52,7 @@ class BackendServiceException extends RuntimeException
    * @param Throwable|null $previous
    * @return self
    */
-  public static function http(int $status, Throwable $previous = null): self
-  {
+  public static function http(int $status, Throwable $previous = null): self {
     return new self('Backend request failed.', $status, $previous);
   }
 
@@ -81,7 +78,7 @@ class BackendServiceException extends RuntimeException
       ? ["templates.$slug.error.backend-unavailable", "error.backend-unavailable"]
       : ["error.backend-unavailable"];
 
-    $view = collect($candidates)->first(fn ($v) => View::exists($v)) ?? "errors.backend-unavailable";
+    $view = collect($candidates)->first(fn($v) => View::exists($v)) ?? "errors.backend-unavailable";
 
     $layout = ($slug && View::exists("templates.$slug.layouts.app"))
       ? "templates.$slug.layouts.app"
@@ -89,7 +86,7 @@ class BackendServiceException extends RuntimeException
 
     return response()->view($view, [
       'message' => 'We are experiencing issues contacting the backend. Please try again in a moment.',
-      'layout'  => $layout,
+      'layout' => $layout,
     ], 503);
   }
 }
