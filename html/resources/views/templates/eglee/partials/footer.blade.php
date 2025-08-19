@@ -52,7 +52,7 @@
       <div class="footer-logo"><h3 class="text-light">{{ config('constants.SITE_NAME') }}</h3></div>
       <div class="footer-text">Copyright © 2023 - <?= date('Y'); ?> {{ config('constants.SITE_URL') }} <br/>
         Developed by
-        <a href="http://wayox.com" target="_blank">wayox.com</a> & HiperBinario.
+        <a href="https://wayox.com" target="_blank">wayox.com</a>
       </div>
     </div>
   </div>
